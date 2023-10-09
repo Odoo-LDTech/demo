@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+	<data>
+	<!-- explicit wizard view definition -->
+		<record model="ir.ui.view" id="hr_shift_bulk_change_form">
+			<field name="name">Shift bulk change form</field>
+			<field name="model">hr.shift.bulk.change</field>
+			<field name="arch" type="xml">
+				<form  create="false" edit="false">
+					<sheet>
+						<group>
+							<group>
+								<field name="department_id" options="{'no_open': True, 'no_create': True}"/>
+								<field name="resource_calendar_id" options="{'no_open': True, 'no_create': True}"/>
+								<field name="all_employees" widget="boolean_toggle"/>
+							</group>
+							<group>
+								<field name="date"/>
+								<field name="company_id" options="{'no_open': True, 'no_create': True}"/>
+								<field name="employee_ids" domain="[('id', '=', department_id)]" widget="many2many_tags" attrs="{'invisible': [('all_employees','=',True)],'required': [('all_employees','!=',True)]}" options="{'no_create': True}"/>
+							</group>
+						</group>
+						<footer>
+							<button string="Change shift" name="action_change_shift" type="object"
+								class="oe_highlight" confirm="Are you sure want to change the shift ?"/>
+							<button string="Cancel" special="cancel"
+								class="oe_link"/>
+						</footer>
+					</sheet>
+
+				</form>
+			</field>
+		</record>
+
+	<!-- actions opening views on models -->
+	<record model="ir.actions.act_window" id="shift_bulk_change_form_action_window">
+		<field name="name">Employee Shift change</field>
+		<field name="res_model">hr.shift.bulk.change</field>
+		<field name="view_mode">form</field>
+		<field name="target">new</field>
+	</record>
+
+	<menuitem name="Shift Change"
+			  id="menu_shift_bulk_change_id"
+			  parent="ld_hr_employee_shift.menu_shift_schedule_generate_id_menu"
+			  action="shift_bulk_change_form_action_window"/>
+
+  </data>
+</odoo>
