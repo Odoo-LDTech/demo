@@ -43,7 +43,7 @@
 
 	<menuitem name="Shift Change"
 			  id="menu_shift_bulk_change_id"
-			  parent="ld_hr_employee_shift.menu_shift_schedule_generate_id_menu"
+			  parent="hr_employee_shift.menu_shift_schedule_generate_id_menu"
 			  action="shift_bulk_change_form_action_window"/>
 
   </data>

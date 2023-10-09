@@ -5,7 +5,7 @@
     'sequence': -100,
     'summary': 'Shift customization',
     'description': "Shift customization",
-    'depends': ['hr', 'ld_hr_employee_shift'],
+    'depends': ['hr', 'hr_employee_shift'],
     'data': [
         'security/ir.model.access.csv',
         'report/hr_bulk_shift_change_views.xml',
