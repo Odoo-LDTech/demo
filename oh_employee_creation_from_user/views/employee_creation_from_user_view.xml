@@ -24,7 +24,7 @@
 <!--            </field>-->
 <!--        </record>-->
 
-        <record id="view_hr_employee_inherit1" model="ir.ui.view">
+        <!-- <record id="view_hr_employee_inherit1" model="ir.ui.view">
             <field name="name">hr.employee.form1</field>
             <field name="model">hr.employee</field>
             <field name="inherit_id" ref="hr.view_employee_form"/>
@@ -34,6 +34,6 @@
                      attrs="{'invisible': [('user_id', '!=', False)]}"/>
                 </xpath>
             </field>
-        </record>
+        </record> -->
     </data>
 </odoo>
