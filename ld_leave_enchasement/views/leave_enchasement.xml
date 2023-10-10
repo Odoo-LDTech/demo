@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <record id="leave_enchasement_form_view" model="ir.ui.view">
+        <field name="name">Leave Enchasement</field>
+        <field name="model">leave.enchasement</field>
+        <!--        <field name="inherit_id" ref="leave_enchasement.leave_enchasement_view_form"/>-->
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <field name="status" widget="statusbar"
+                           statusbar_visible="draft,approve,reject"/>
+
+                    <button string="Draft" state="draft" name="action_draft" type="object"
+                            class="btn btn-primary"
+                            attrs="{'invisible':[('status','in',['approve','reject'])]}">
+                    </button>
+                    <button string="Approve" state="Approved" name="action_approved" type="object"
+                            class="btn btn-primary"
+                            attrs="{'invisible':[('status','in',['reject','approve'])]}">
+                    </button>
+                    <!--                    <button string="Reject" state="rejected" name="action_rejected" type="object"-->
+                    <!--                            class="btn btn-danger"-->
+                    <!--                            attrs="{'invisible':[('status','in',['reject'])]}">-->
+                    <!--                    </button>-->
+                    <button name="reject_reason_wizard" string="Reject" state="rejected" class="btn btn-danger"
+                            type="object">
+                    </button>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="employee_name" attrs="{'readonly':[('status','in',['approve','reject'])]}"
+                                   groups="base.group_system"/>
+                            <field name="department" attrs="{'readonly':[('status','in',['approve','reject'])]}"
+                                   groups="base.group_system"/>
+                            <field name="leave" attrs="{'readonly':[('status','in',['approve','reject'])]}"
+                                   groups="base.group_system"/>
+                        </group>
+                        <group>
+                            <field name="amount" attrs="{'readonly':[('status','in',['approve','reject'])]}"
+                                   groups="base.group_system"/>
+                            <field name="total" attrs="{'readonly':[('status','in',['approve','reject'])]}"
+                                   groups="base.group_system"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <!--     student entry tree view -->
+    <record id="leave_enchasement_tree_view" model="ir.ui.view">
+        <field name="name">Leave Enchasement</field>
+        <field name="model">leave.enchasement</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="employee_name"/>
+                <field name="department"/>
+                <field name="leave"/>
+                <field name="amount"/>
+                <field name="total"/>
+                <!--                <field name="reason_for_reject"/>-->
+                <field name="status"
+                       decoration-success="status == 'approve'"
+                       decoration-info="status == 'draft'"
+                       decoration-danger="status == 'reject'"
+                       widget="badge"/>
+            </tree>
+        </field>
+    </record>
+    <!--     student entry action -->
+    <record id="leave_enchasement_action_view" model="ir.actions.act_window">
+        <field name="name">Leave Enchasement</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">leave.enchasement</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <menuitem id="leave_menu"
+              name="leave"
+              sequence="0"/>
+
+    <menuitem id="leave_emp_menu"
+              name="emp leave"
+              parent="leave_menu"
+              sequence="0"/>
+
+    <menuitem id="leave_enchasement_submenu"
+              name="Leave Enchasement"
+              parent="hr.menu_hr_employee_payroll"
+              action="leave_enchasement_action_view"
+              sequence="4"/>
+</odoo>

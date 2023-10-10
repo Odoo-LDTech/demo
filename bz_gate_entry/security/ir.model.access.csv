@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_gate_entry,gate.entry,model_gate_entry,base.group_user,1,1,1,1
+access_gate_entry_line,gate.entry.line,model_gate_entry_line,base.group_user,1,1,1,1
+access_transportation_details_line,transportation.details.line,model_transportation_details_line,,1,1,1,1
+access_plant_count_line,plant.count.line,model_plant_count_line,,1,1,1,1

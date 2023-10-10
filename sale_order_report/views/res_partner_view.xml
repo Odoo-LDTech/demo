@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<record id="view_res_partner_inherit" model="ir.ui.view">
+		<field name="name">res.partner.inherit</field>
+		<field name="model">res.partner</field>
+		<field name="inherit_id" ref="base.view_partner_form"/>
+		<field name="arch" type="xml">
+			<field name="vat" position="after">
+				<field name="is_broker" />
+				<field name="is_customer" />
+				<field name="is_vendor" />
+			</field>
+		</field>
+	</record>
+
+	<record id="view_res_company_inherit" model="ir.ui.view">
+		<field name="name">res.company.inherit</field>
+		<field name="model">res.company</field>
+		<field name="inherit_id" ref="base.view_company_form"/>
+		<field name="arch" type="xml">
+			<xpath expr="//notebook" position="inside">
+				<page name="report" string="Report Configuration">
+					<group string="Sale Order &amp; Invoice Report">
+						<field name="so_company_details"/>
+						<field name="so_footer_line1"/>
+						<field name="so_footer_line2"/>
+					</group>
+					<group string="Purchase Order &amp; Vendor Bill Report">
+						<field name="po_company_details"/>
+						<field name="po_footer_line1"/>
+						<field name="po_footer_line2"/>
+					</group>
+				</page>
+			</xpath>
+		</field>
+	</record>
+</odoo>

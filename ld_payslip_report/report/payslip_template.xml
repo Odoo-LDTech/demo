@@ -1,0 +1,532 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="report_payslip">
+        <t t-foreach="docs" t-as="o">
+            <t t-call="web.html_container">
+                <t t-call="web.external_layout">
+                    <div class="main" style="border:black; border-width: 3px; border-style: solid">
+                        <table style="width: 100%; height: 180px">
+                            <form>
+                                <h1 style="font-size: 40px; padding-left: 7px; padding: 5px">Payslip</h1>
+                                <p style="font-size: 20px; padding-left: 7px">
+                                    Salary  Slip for
+                                    <t t-esc="o.month_get"/>
+                                    <t t-esc="o.year_get"/>
+                                </p>
+                                <hr/>
+                                <th colspan="4"
+                                    style="background-color:#1873ab;color: #FFFFFF;font-size: 21px;text-align:center;padding: 7px">
+                                    Employee Details
+                                </th>
+                                <tr>
+                                    <td style="padding-right: 5px; padding:5px">
+                                        <label for="name" style="padding-left: 4px">
+                                            <b>Name</b>
+                                        </label>
+                                    </td>
+                                    <td style="text-align: center; padding:5px">
+                                        <t t-esc="o.employee_id.name"/>
+                                        <!--                                        <span t-field="o.name"/>-->
+                                    </td>
+
+                                    <td>
+                                        <label for="pr_days" style="padding-left: 4px">
+                                            <b>PR Days</b>
+                                        </label>
+                                    </td>
+                                    <td style="text-align: center">
+                                        <t t-esc="float(o.prcalc)"/>
+                                        <!--                                        <span t-field="o.pan"/>-->
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label for="employee_id" style="padding-left: 4px; padding:5px">
+                                            <b>Employee ID</b>
+                                        </label>
+                                    </td>
+                                    <td style="text-align: center; padding:5px">
+                                        <t t-esc="o.employee_id.employee_id"/>
+
+                                        <!--                                        <span t-field="o.employee_id"/>-->
+                                    </td>
+
+                                    <td>
+                                        <label for="off_days" style="padding-left: 4px; padding:5px">
+                                            <b>OFF Days</b>
+                                        </label>
+                                    </td>
+                                    <td style="text-align: center; padding:5px">
+                                        <t t-esc="float(o.offdays)"/>
+                                        <!--                                        <span t-field="o.pan"/>-->
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label for="designation" style="padding-left: 4px; padding:5px">
+                                            <b>Designation</b>
+                                        </label>
+                                    </td>
+                                    <td style="text-align: center; padding:5px">
+                                        <t t-esc="o.employee_id.job_title"/>
+                                        <!--                                        <span t-field="o.designation"/>-->
+                                    </td>
+
+                                    <td>
+                                        <label for="absent_days" style="padding-left: 4px">
+                                            <b>Absent Days</b>
+                                        </label>
+                                    </td>
+                                    <td style="text-align: center">
+                                        <t t-foreach="o.worked_days_line_ids" t-as="p">
+                                            <t t-if="p.name == 'Missing Attendance days'">
+                                                <t t-esc="p.number_of_days"/>
+                                            </t>
+                                        </t>
+                                        <!--                                        <t t-esc="o.employee_id.pan_number"/>-->
+                                        <!--                                        <span t-field="o.pan"/>-->
+                                    </td>
+
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <label for="pan" style="padding-left: 4px; padding:5px">
+                                            <b>PAN Number</b>
+                                        </label>
+                                    </td>
+                                    <td style=  "text-align: center; padding:5px">
+                                        <t t-esc="o.employee_id.pan_no"/>
+                                        <!--                                        <span t-field="o.pan"/>-->
+                                    </td>
+
+                                    <td>
+                                        <label for="payable_days" style="padding-left: 4px">
+                                            <b>Payable Days</b>
+                                        </label>
+                                    </td>
+                                    <td style="text-align: center">
+                                        <t t-esc="o.cal_payable_days()"/>
+                                        <!--                                        <span t-field="o.calendar_days"/>-->
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <label for="esic" style="padding-left: 4px; padding:5px">
+                                            <b>ESIC</b>
+                                        </label>
+                                    </td>
+                                    <td style="text-align: center; padding:5px">
+                                        <t t-esc="o.employee_id.esi_no"/>
+                                        <!--                                        <span t-field="o.esic"/>-->
+                                    </td>
+
+                                    <td>
+                                        <label for="bank_name" style="padding-left: 4px">
+                                            <b>Bank Name</b>
+                                        </label>
+                                    </td>
+                                    <td style="text-align: center">
+                                        <t t-esc="o.employee_id.bank_account_id.bank_id.name"/>
+                                        <!--                                        <span t-field="o.bank_name"/>-->
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label for="uan" style="padding-left: 4px; padding:5px">
+                                            <b>UAN</b>
+                                        </label>
+                                    </td>
+                                    <td style="text-align: center; padding:5px">
+                                        <t t-esc="o.employee_id.uan"/>
+                                        <!--                                        <span t-field="o.uan"/>-->
+                                    </td>
+                                    <td>
+                                        <label for="account_no" style="padding-left: 4px">
+                                            <b>Account Number</b>
+                                        </label>
+                                    </td>
+                                    <td style="text-align: center">
+                                        <t t-esc="o.employee_id.bank_account_id.acc_number"/>
+                                        <!--                                        <span t-field="o.account_no"/>-->
+                                    </td>
+
+                                </tr>
+                            </form>
+                        </table>
+                        <hr/>
+
+                        <table style="width: 100%; height: 175px">
+                            <th style="background-color:#1873ab;color: #FFFFFF;font-size: 21px; padding: 7px">Earning
+                                Details
+                            </th>
+                            <th style="background-color:#1873ab;color: #FFFFFF;font-size: 21px; padding: 7px">Monthly
+                                Gross
+                            </th>
+                            <th style="background-color:#1873ab;color: #FFFFFF;font-size: 21px; padding: 7px">Earnings
+                            </th>
+                            <th style="background-color:#1873ab;color: #FFFFFF;font-size: 21px; padding: 7px">Deduction
+                                Details
+                            </th>
+                            <th style="background-color:#1873ab;color: #FFFFFF;font-size: 21px; padding: 7px">Current
+                            </th>
+                            <tr style="text-align: center">
+                                <td>
+                                    <label for="basic" style="padding-left: 4px; padding:5px">
+                                        <b>Basic</b>
+                                    </label>
+                                </td>
+                                <td>
+                                    <t t-esc="o.contract_id.basic"/>
+                                    <!--                                    <span t-field="o.basic"/>-->
+                                </td>
+                                <td>
+                                    <t t-foreach="o.line_ids" t-as="p">
+                                        <t t-if="p.code == 'BASIC'">
+                                            <t t-esc="p.total"/>
+                                        </t>
+                                    </t>
+                                    <!--                                    <span t-field="o.basic"/>-->
+                                </td>
+                                <td>
+                                    <label for="employer_pf" style="padding-left: 4px; padding:5px">
+                                        <b>Employee PF</b>
+                                    </label>
+                                </td>
+                                <td>
+                                    <t t-foreach="o.line_ids" t-as="p">
+                                        <t t-if="p.code == 'PF'">
+                                            <t t-esc="p.total"/>
+                                        </t>
+                                    </t>
+                                </td>
+                            </tr>
+
+                            <tr style="text-align: center">
+                                <td>
+                                    <label for="hra" style="padding-left: 4px; padding:5px">
+                                        <b>HRA</b>
+                                    </label>
+                                </td>
+                                <td>
+                                    <t t-esc="o.contract_id.hra"/>
+                                    <!--                                    <span t-field="o.hra"/>-->
+                                </td>
+                                <td>
+                                    <t t-foreach="o.line_ids" t-as="p">
+                                        <t t-if="p.code == 'HRA'">
+                                            <t t-esc="p.total"/>
+                                        </t>
+                                    </t>
+                                    <!--                                    <span t-field="o.hra"/>-->
+                                </td>
+
+                                <td>
+                                    <label for="pf_ex" style="padding-left: 4px; padding:5px">
+                                        <b>PF EX</b>
+                                    </label>
+                                </td>
+                                <td>
+                                    <t t-foreach="o.line_ids" t-as="p">
+                                        <t t-if="p.code == 'VPF'">
+                                            <t t-esc="p.total"/>
+                                        </t>
+                                    </t>
+                                </td>
+
+                            </tr>
+
+                            <tr style="text-align: center">
+                                <td>
+                                    <label for="conveyance" style="padding-left: 4px; padding:5px">
+                                        <b>Conveyance</b>
+                                    </label>
+                                </td>
+                                <td>
+                                    <t t-esc="o.contract_id.conveyance"/>
+                                </td>
+                                <td style="padding:5px">
+                                    <t t-foreach="o.line_ids" t-as="p">
+                                        <t t-if="p.code == 'C'">
+                                            <t t-esc="p.total"/>
+                                        </t>
+                                    </t>
+                                    <!--                                    <t t-esc="o.contract_id.special_allowance"/>-->
+                                </td>
+
+                                <td>
+                                    <label for="esi" style="padding-left: 4px; padding:5px">
+                                        <b>ESI</b>
+                                    </label>
+                                </td>
+                                <td style="padding:5px">
+                                    <t t-foreach="o.line_ids" t-as="p">
+                                        <t t-if="p.code == 'ESIC'">
+                                            <t t-esc="p.total"/>
+                                        </t>
+                                    </t>
+                                    <!--                                    <t t-esc="o.contract_id.esi"/>-->
+                                </td>
+                            </tr>
+
+                            <tr style="text-align: center">
+                                <td>
+                                    <label for="other_allowance" style="padding-left: 4px; padding:5px">
+                                        <b>Other Allowance</b>
+                                    </label>
+                                </td>
+                                <td>
+                                    <t t-esc="o.contract_id.special_allowance"/>
+                                </td>
+                                <td style="padding:5px">
+                                    <t t-foreach="o.line_ids" t-as="p">
+                                        <t t-if="p.code == 'Other'">
+                                            <t t-esc="p.total"/>
+                                        </t>
+                                    </t>
+                                    <!--                                    <t t-esc="o.contract_id.special_allowance"/>-->
+                                </td>
+
+                                <td>
+                                    <label for="advance" style="padding-left: 4px; padding:5px">
+                                        <b>Advance</b>
+                                    </label>
+                                </td>
+                                <td>
+                                    <t t-foreach="o.line_ids" t-as="p">
+                                        <t t-if="p.name == 'Loan'">
+                                            <t t-esc="p.total"/>
+                                        </t>
+                                    </t>
+                                </td>
+                            </tr>
+                            <tr style="text-align: center">
+                                <td>
+                                    <label for="bonus" style="padding-left: 4px; padding:5px">
+                                        <b>Bonus</b>
+                                    </label>
+                                </td>
+                                <td>
+                                    <t t-esc="o.contract_id.bonus"/>
+                                </td>
+                                <!--                            <tr style="text-align: center">-->
+<!--                                <td>-->
+<!--                                    <t t-foreach="o.line_ids" t-as="p">-->
+<!--                                         <t t-if="p.name == 'Bonus'">-->
+<!--                                            <t t-if="p.total &gt; 0">-->
+<!--                                                <label for="bonus" style="padding-left: 4px; padding:5px">-->
+<!--                                                    <b>Bonus</b>-->
+<!--                                                </label>-->
+<!--                                            </t>-->
+<!--                                        </t>-->
+<!--                                    </t>-->
+<!--                                </td>-->
+                                <td>
+                                    <t t-foreach="o.line_ids" t-as="p">
+                                        <t t-if="p.name == 'Bonus'">
+<!--                                            <t t-if="p.total">-->
+                                                <t t-esc="p.total"/>
+<!--                                            </t>-->
+                                        </t>
+                                    </t>
+                                </td>
+
+                                <td>
+                                    <label for="income_tax" style="padding-left: 4px; padding:5px">
+                                        <b>Income Tax</b>
+                                    </label>
+                                </td>
+                                <td style="padding:5px">
+                                    <t t-foreach="o.line_ids" t-as="p">
+                                        <t t-if="p.code == 'INT'">
+                                            <t t-esc="p.total"/>
+                                        </t>
+                                    </t>
+                                    <!--                                    <t t-esc="o.contract_id.income_tax"/>-->
+                                </td>
+
+                            </tr>
+                            <tr style="text-align: center">
+                                <td>
+                                    <label for="special_allowance" style="padding-left: 4px; padding:5px">
+                                        <b></b>
+                                    </label>
+                                </td>
+                                <td>
+                                    <!--                                    <t t-esc="o.contract_id.special_allowance"/>-->
+                                </td>
+                                <td>
+
+                                </td>
+                                <td>
+                                    <label for="professional_tax" style="padding-left: 4px; padding:5px">
+                                        <b>P-TAX</b>
+                                    </label>
+                                </td>
+                                <td>
+                                    <t t-foreach="o.line_ids" t-as="p">
+                                        <t t-if="p.code == 'PT'">
+                                            <t t-esc="p.total"/>
+                                        </t>
+                                    </t>
+                                </td>
+
+                            </tr>
+                            <tr style="text-align: center">
+                                <td>
+                                    <label for="special_allowance" style="padding-left: 4px; padding:5px">
+                                        <b></b>
+                                    </label>
+                                </td>
+                                <td>
+                                    <!--                                    <t t-esc="o.contract_id.special_allowance"/>-->
+                                </td>
+                                <td>
+
+                                </td>
+                                <td>
+                                    <label for="other_deduction" style="padding-left: 4px; padding:5px">
+                                        <b>Other Deduction</b>
+                                    </label>
+                                </td>
+                                <td style="padding:5px">
+                                    <t t-foreach="o.line_ids" t-as="p">
+                                        <t t-if="p.code == 'OTD100'">
+                                            <t t-esc="p.total"/>
+                                        </t>
+                                    </t>
+                                </td>
+
+                            </tr>
+
+                            <!--                            <t t-set="total_value"-->
+                            <!--                               t-value="float(o.contract_id.basic + o.contract_id.hra + o.conveyance_allowance_value + o.contract_id.special_allowance)"/>-->
+
+                            <tr style="text-align: center">
+                                <td style="background-color:#1873ab;color: #FFFFFF">
+                                    <label for="total">
+                                        <b>TOTAL:</b>
+                                    </label>
+                                </td>
+                                <td style="padding:5px">
+                                    <t t-foreach="o.line_ids" t-as="p">
+                                        <t t-if="p.name == 'Gross'">
+                                            <t t-esc="p.amount"/>
+                                        </t>
+                                    </t>
+                                    <!--                                    <t t-esc="total_value"/>-->
+                                </td>
+                                <td style="padding:5px">
+                                    <b>
+                                        <t t-foreach="o.line_ids" t-as="p">
+                                            <t t-if="p.code == 'GROSS'">
+                                                <t t-esc="p.total"/>
+                                            </t>
+                                        </t>
+                                    </b>
+                                </td>
+                                <td>
+                                    <label for="welfare_deduction" style="padding-left: 4px; padding:5px">
+                                        <b>Welfare Deduction</b>
+                                    </label>
+                                </td>
+                                <td style="padding:5px">
+                                    <t t-foreach="o.line_ids" t-as="p">
+                                        <t t-if="p.name == 'Welfare fund'">
+                                            <t t-esc="p.total"/>
+                                        </t>
+                                    </t>
+                                    <!--                                    <t t-esc="o.contract_id.welfare_deduction"/>-->
+                                </td>
+                                <td/>
+                                <td/>
+                            </tr>
+                        </table>
+                        <hr/>
+                        <table style="width: 100%; height: 90px">
+                            <tr style="text-align: center">
+                                <td style="background-color:#1873ab;color: #FFFFFF; padding:5px">
+                                    <label for="total_earnings">
+                                        <b>Total Earnings:</b>
+                                    </label>
+                                </td>
+                                <td style="padding:5px">
+                                    <b>
+                                        <t t-foreach="o.line_ids" t-as="p">
+                                            <t t-if="p.name == 'Gross'">
+                                                <t t-esc="p.total"/>
+                                            </t>
+                                        </t>
+                                    </b>
+                                </td>
+
+                                <t t-set="total_deduction_value"
+                                   t-value="float(o.contract_id.pf + o.contract_id.voluntary_pf + o.esi_value + o.loan_value + o.income_tax_value + o.contract_id.p_tax + o.other_deduction_value + o.welfare_fund_value)"/>
+
+                                <td style="background-color:#1873ab;color: #FFFFFF">
+                                    <label for="total_deductions">
+                                        <b>Total Deductions:</b>
+                                    </label>
+                                </td>
+                                <td>
+                                    <t t-esc="total_deduction_value"/>
+                                    <!--                                    <span t-field="o.total_deductions"/>-->
+                                </td>
+                            </tr>
+                            <tr style="text-align: center">
+                                <td style="background-color:#1873ab;color: #FFFFFF; padding:5px">
+                                    <label for="net_payable">
+                                        <b>Net Payable:</b>
+                                    </label>
+                                </td>
+                                <td style="padding:5px">
+                                    <b>
+                                        <t t-foreach="o.line_ids" t-as="p">
+                                            <t t-if="p.code == 'NET'">
+                                                <t t-esc="p.total"/>
+                                            </t>
+                                        </t>
+                                    </b>
+                                </td>
+                                <td/>
+                                <td/>
+                            </tr>
+                            <tr style="text-align: center">
+                                <td style="background-color:#1873ab;color: #FFFFFF; padding:5px">
+                                    <label for="net_payable_in_words">
+                                        <b>Net Payable in words:</b>
+                                    </label>
+                                </td>
+                                <td colspan="3" style="padding-left: 10px; padding:5px">
+                                    <t t-esc="o.word_num"/>
+
+                                    <!--                                    <span t-field="o.net_payable_in_words"/>-->
+                                </td>
+                                <td/>
+                                <td/>
+                            </tr>
+
+                        </table>
+                    </div>
+
+                    <footer style="margin-top: 15%; margin-left: 20%">
+                        <p>
+                            This is a system generated statement and does not require a signature
+                        </p>
+                    </footer>
+                </t>
+            </t>
+        </t>
+    </template>
+    <template id="payslip_report">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="ld_payslip_report.report_payslip"/>
+            </t>
+        </t>
+    </template>
+</odoo>
+

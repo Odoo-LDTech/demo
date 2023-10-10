@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_store_issue,store.issue,model_store_issue,,1,1,1,0
+access_store_products,store.products,model_store_products,,1,1,1,0
+access_material_issue_reject_remark,material.issue.reject.remark,model_material_issue_reject_remark,,1,1,1,1

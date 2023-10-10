@@ -1,0 +1,217 @@
+<odoo>
+    <data>
+
+        <!-- explicit form view definition -->
+
+        <record id="purchase_indent_view_form" model="ir.ui.view">
+            <field name="name">purchase.indent.form</field>
+            <field name="model">purchase.indent</field>
+            <field name="arch" type="xml">
+                <form string="Purchase Indent">
+                    <header>
+                        <button string="Send for HOD Approval" states="new" name="action_send_hod_approval"
+                                type="object" class="oe_highlight"/>
+                        <button string="Approve" name="action_hod_approved" type="object" class="oe_highlight"
+                                attrs="{'invisible':['|',('department_flag','=',False),('state','!=','hod_in_progress')]}"/>
+
+                        <button string="Approve" name="action_sm_approved" type="object" class="oe_highlight"
+                                attrs="{'invisible':['|',('store_manager_flag','=',False),('state','!=','sm_in_progress')]}"/>
+                        <button string="Reject" name="button_reject" type="object"
+                                attrs="{'invisible':[('state','in',('new','sm_approved','close'))]}"/>
+                        <button name="new_purchase_quotation" string="New Quotation" type="object" class="oe_highlight"
+                                attrs="{'invisible':[('state','!=','sm_approved')]}"/>
+                        <field name="state" widget="statusbar"
+                               statusbar_visible="new,hod_in_progress,sm_in_progress,sm_approved"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button class="oe_stat_button" type="object" name="action_rfq_count" icon="fa-list-alt"
+                                    attrs="{'invisible': [('rfq_count', '=', 0)]}">
+                                <field name="rfq_count" widget="statinfo" string="RFQs/Orders"
+                                       attrs="{'invisible': [('rfq_count', '=', 0)]}"/>
+                            </button>
+                        </div>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" readonly="1"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="employee_id" options="{'no_open': True}"/>
+                                <field name="department_id" force_save="1" options="{'no_open': True}"/>
+                                <field name="hod_id" force_save="1" options="{'no_open': True}"/>
+                                <field name="store_manager_id" force_save="1" options="{'no_open': True}"/>
+                                <field name="ana_cost_center_id"/>
+                            </group>
+                            <group>
+                                <field name="indent_date"/>
+                                <field name="indent_type"/>
+                                <field name="material_required_date"/>
+                                <field name="delivery_location"/>
+                                <field name="inspection_criteria"/>
+                                <field name="rejected_remarks" invisible="1"/>
+                                <field name="rejected_user_id" invisible="1"/>
+                                <field name="department_flag" invisible="1"/>
+                                <field name="store_manager_flag" invisible="1"/>
+                            </group>
+                        </group>
+
+                        <notebook colspan="4">
+                            <page string="Product Details">
+                                <field name="prod_ids" options="{'no_open': True}">
+                                    <tree editable="bottom" delete="1">
+                                        <field name="product_id"/>
+                                        <field name="code" force_save="1"/>
+                                        <field name="name"/>
+                                        <field name="product_qty"/>
+                                        <field name="available_qty" readonly="1" force_save="1"/>
+                                        <field name="product_uom"/>
+                                        <field name="taxes_id" widget="many2many_tags"/>
+                                        <field name="schedule_date"/>
+                                        <field name="remarks"/>
+                                        <field name="lpp" force_save="1"/>
+                                        <field name="price_unit"/>
+                                        <field name="is_purchase" invisible="1" force_save="1"/>
+                                    </tree>
+                                </field>
+                            </page>
+
+                            <page string="Remarks">
+                                <group>
+                                    <field name="user_remarks"/>
+                                    <field name="hod_remarks"/>
+                                    <field name="sm_remarks"/>
+                                </group>
+                            </page>
+                        </notebook>
+                        <group class="oe_subtotal_footer oe_right">
+                            <field name="amount_untaxed" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            <field name="amount_tax" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                            <field name="amount_total" class="oe_subtotal_footer_separator" widget="monetary"
+                                   options="{'currency_field': 'currency_id'}"/>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- explicit list view definition -->
+
+        <record model="ir.ui.view" id="purchase_indent_view_list">
+            <field name="name">purchase.indent.list</field>
+            <field name="model">purchase.indent</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="name"/>
+                    <field name="indent_date"/>
+                    <field name="employee_id"/>
+                    <field name="department_id"/>
+                    <field name="state" widget="badge" decoration-success="state == 'sm_approved'"
+                           decoration-danger="state =='rejected'"
+                           decoration-info="state not in ('sm_approved','rejected')"/>
+                    <field name="amount_total" sum="Total"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- explicit search view definition -->
+
+        <record model="ir.ui.view" id="purchase_indent_view_search">
+            <field name="name">purchase.indent.search</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.view_purchase_order_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr="//search/group" position="inside">
+                    <filter name="indent_id" string="Purchase Indent" domain="[]" context="{'group_by': 'indent_id'}"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- explicit Search view definition -->
+        <record id="view_purchase_indent_filter" model="ir.ui.view">
+            <field name="name">purchase.indent.select</field>
+            <field name="model">purchase.indent</field>
+            <field name="arch" type="xml">
+                <search string="Search Purchase Indent">
+                    <field name="employee_id"/>
+                    <field name="indent_date"/>
+                    <field name="department_id"/>
+                    <field name="state"/>
+
+                    <group expand="0" string="Group By">
+                        <filter string="Employee" name="employee_id" domain="[]" context="{'group_by': 'employee_id'}"/>
+                        <filter string="Indent date" name="indent_date" domain="[]"
+                                context="{'group_by': 'indent_date'}"/>
+                        <filter string="Department" name="department_id" domain="[]"
+                                context="{'group_by': 'department_id'}"/>
+                        <filter string="Status" name="state" domain="[]" context="{'group_by': 'state'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!-- New Quotation button - wizard -->
+        <record id="new_purchase_quaotation_wizard" model="ir.ui.view">
+            <field name="name">pi.quotation.form</field>
+            <field name="model">pi.quotation</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <group>
+                            <!--                            <field name="category_id"/>-->
+                            <field name="partner_ids" widget="many2many_tags"/>
+                        </group>
+                        <group>
+                            <field name="date"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button string="Create Quotation" name="create_quotation" type="object" class="oe_highlight"/>
+                        <!-- <button string="Create &amp; Send Quotation" name="create_send_quotation" type="object" class="oe_highlight"/> -->
+                        <button special="cancel" class="oe_link" string="Cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+
+        <!-- actions opening views on models -->
+
+        <record model="ir.actions.act_window" id="purchase_indent_action_window">
+            <field name="name">Purchase Indent</field>
+            <field name="res_model">purchase.indent</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <!-- Top menu item -->
+
+        <menuitem name="Indent" id="menu_purchase_indent" parent="purchase.menu_purchase_root"
+                  sequence="-1"/>
+
+        <!-- actions -->
+
+        <menuitem name="Indent" id="sub_menu_purchase_indent" parent="menu_purchase_indent"
+                  action="purchase_indent_action_window" sequence="1"/>
+
+        <record id="purchase_inherit_order_form1" model="ir.ui.view">
+            <field name="name">purchase.order.form.inherit</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form/sheet/div[1][@name='button_box']" position="inside">
+                    <button class="oe_stat_button" type="object" name="action_open_indent" icon="fa-indent"
+                            attrs="{'invisible': [('indent_count', '=', 0)]}">
+                        <field name="indent_count" widget="statinfo" string="Indent"
+                               attrs="{'invisible': [('indent_count', '=', 0)]}"/>
+                    </button>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

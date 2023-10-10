@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+
+      <record id="employee_attendance_sheet_tree" model="ir.ui.view">
+          <field name="name">employee.attendance.report.tree</field>
+          <field name="model">employee.attendance.report</field>
+          <field name="arch" type="xml">
+              <tree string="Employee Attendance Report" editable="bottom">
+                  <field name="employee_id"/>
+                  <field name="shift_type"/>
+                  <field name="shift_in_time"/>
+                  <field name="shift_out_time"/>
+                  <field name="today_date_atte"/>
+                  <field name="check_in"/>
+                  <field name="check_out"/>
+                  <field name="worked_hours"/>
+                  <field name="biomatric_status"/>
+                  <field name="payroll_status"/>
+                  <field name="shift_status"/>
+              </tree>
+          </field>
+      </record>
+
+      <record id="employee_attendance_sheet" model="ir.actions.act_window">
+                <field name="name">Employee Attendance</field>
+                <field name="res_model">employee.attendance.report</field>
+                <field name="view_mode">tree</field>
+      </record>
+
+      <menuitem id="menuitem_employee_attendance_sheet"
+            name="Employee Attendance Report"
+            parent="hr_attendance.menu_hr_attendance_root"
+            action="employee_attendance_sheet"
+        sequence="8"/>
+
+  </data>
+</odoo>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <!-- Skip Loan Installments Tree View -->
+        <record id="closed_loan_tree_view" model="ir.ui.view">
+            <field name="name">closed.loan.tree</field>
+            <field name="model">closed.loan</field>
+            <field name="arch" type="xml">
+                <tree string="closed Loan">
+                    <field name="employee_id"/>
+                    <field name="date"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Skip Loan Installments Form View -->
+        <record id="closed_loan_form_view" model="ir.ui.view">
+            <field name="name">closed.loan.form</field>
+            <field name="model">closed.loan</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="action_submit" type="object" string="Submit" states="draft" class="oe_highlight"/>
+                        <button name="action_cancel" type="object" string="Cancel" states="draft" />
+                        <button name="action_approve" type="object" string="Approve" states="waiting_approval_1" class="oe_highlight" groups="hr.group_hr_manager"/>
+                        <button name="action_double_approve" type="object" string="Approve" states="waiting_approval_2" class="oe_highlight" groups="account.group_account_user,account.group_account_manager"/>
+                        <button name="action_refuse" type="object" string="Refuse" states="waiting_approval_1,waiting_approval_2" class="oe_highlight" groups="hr.group_hr_manager"/>
+                        <button name="action_closed" type="object" string="Closed" states="draft,approve" class="oe_highlight" groups="hr.group_hr_manager"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,waiting_approval_1,waiting_approval_2,approve" />
+                    </header>
+                    <sheet string="closed Loan">
+                        <group>
+                            <group>
+                                <field name="employee_id"/>
+                                <field name="emp_loan_id" invisible="1"/>
+                                <field name="date"/>
+                                <field name="loan_id" domain="['&amp;',('state', '=', 'approve'), ('id', 'in', emp_loan_id)]"/>
+                            </group>
+                            <group>
+                                <field name="department_id"/>
+                                <field name="job_position"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Skip Loan Installments Actions  -->
+        <record id="action_closed_loan_installments" model="ir.actions.act_window">
+            <field name="name">Closed Loan</field>
+            <field name="res_model">closed.loan</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Skip Loan Installments
+                </p>
+            </field>
+        </record>
+
+        <!-- Add Skip Loan Installments Menu -->
+        <menuitem name="closed Loan"
+            id="menu_closed_loan_request"
+            parent="ohrms_loan.menu_base_hr_loan_request"
+            action="action_closed_loan_installments"
+            sequence="3"/>
+    </data>
+</odoo>

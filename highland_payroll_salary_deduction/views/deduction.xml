@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+
+<!--          <menuitem-->
+<!--                id="menu_hr_payslip_view_report_deduction_download"-->
+<!--                name="Payslip Deduction Report Download"-->
+<!--                parent="hr_payslip_monthly_report.menu_hr_payslip_reports"-->
+<!--                action="action_hr_payslip_view_report_deduction"-->
+<!--                sequence="12"/>-->
+    </data>
+</odoo>

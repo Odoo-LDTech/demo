@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="hr_contract_form_view_inherit" model="ir.ui.view">
+        <field name="name">hr.contract.inherit</field>
+        <field name="model">hr.contract</field>
+        <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='employee_id']" position="after">
+                <field name="employee_code"/>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page[2]/group/group[1]" position="attributes">
+                <attribute name="invisible">
+                    1
+                </attribute>
+            </xpath>
+            <xpath expr="//form/sheet/notebook/page[2]/group" position="after">
+                <group>
+                    <group string="Employee Part">
+                        <field name="currency_id" invisible="1"/>
+                        <label for="wage" string="Gross"/>
+                        <div class="o_row mw-50" name="wage">
+                            <field name="wage" class="oe_inline o_hr_narrow_field" nolabel="1" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <div class="mb-3">/ Month</div>
+                        </div>
+                        <label for="basic"/>
+                        <div class="o_row mw-50" name="basic">
+                            <field name="basic" class="oe_inline o_hr_narrow_field" nolabel="1" widget="monetary" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <div class="mb-3">/ Month</div>
+                        </div>
+                        <label for="hra"/>
+                        <div class="o_row mw-50" name="hra">
+                            <field name="hra" class="oe_inline o_hr_narrow_field" nolabel="1" widget="monetary" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <div class="mb-3">/ Month</div>
+                        </div>
+                        <label for="conveyance"/>
+                        <div class="o_row mw-50" name="conveyance">
+                            <field name="conveyance" class="oe_inline o_hr_narrow_field" nolabel="1" attrs="{'readonly': [('state', '!=', 'draft')]}"
+                                   widget="monetary"/>
+                            <div class="mb-3">/ Month</div>
+                        </div>
+                        <label for="special_allowance"/>
+                        <div class="o_row mw-50" name="special_allowance">
+                            <field name="special_allowance" class="oe_inline o_hr_narrow_field" nolabel="1"
+                                   widget="monetary" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <div class="mb-3">/ Month</div>
+                        </div>
+                        <label for="pf"/>
+                        <div class="o_row mw-50" name="pf">
+                            <field name="pf" class="oe_inline o_hr_narrow_field" nolabel="1" widget="monetary" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <div class="mb-3">/ Month</div>
+                        </div>
+                        <label for="voluntary_pf"/>
+                        <div class="o_row mw-50" name="voluntary_pf">
+                            <field name="voluntary_pf" class="oe_inline o_hr_narrow_field" attrs="{'readonly': [('state', '!=', 'draft')]}" nolabel="1"
+                                   widget="monetary"/>
+                            <div class="mb-3">/ Month</div>
+                        </div>
+                        <label for="p_tax"/>
+                        <div class="o_row mw-50" name="p_tax">
+                            <field name="p_tax" class="oe_inline o_hr_narrow_field" nolabel="1" widget="monetary" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <div class="mb-3">/ Month</div>
+                        </div>
+                        <label for="esi"/>
+                        <div class="o_row mw-50" name="esi">
+                            <field name="esi" class="oe_inline o_hr_narrow_field" nolabel="1" widget="monetary" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <div class="mb-3">/ Month</div>
+                        </div>
+                        <label for="income_tax"/>
+                        <div class="o_row mw-50" name="income_tax">
+                            <field name="income_tax" class="oe_inline o_hr_narrow_field" nolabel="1" attrs="{'readonly': [('state', '!=', 'draft')]}" widget="monetary"/>
+                            <div class="mb-3">/ Month</div>
+                        </div>
+                        <label for="welfare_deduction"/>
+                        <div class="o_row mw-50" name="welfare_deduction">
+                            <field name="welfare_deduction" class="oe_inline o_hr_narrow_field" nolabel="1"
+                                   widget="monetary" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <div class="mb-3">/ Month</div>
+                        </div>
+                        <label for="in_hand"/>
+                        <div class="o_row mw-50" name="in_hand">
+                            <field name="in_hand" class="oe_inline o_hr_narrow_field" nolabel="1" widget="monetary" attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                            <div class="mb-3">/ Month</div>
+                        </div>
+                    </group>
+                    <group string="Employer Part">
+                        <label for="employer_pf"/>
+                        <div class="o_row mw-50" name="employer_pf">
+                            <field name="employer_pf" class="oe_inline o_hr_narrow_field" nolabel="1"
+                                   widget="monetary"/>
+                            <div class="mb-3">/ Month</div>
+                        </div>
+                        
+                        <label for="employer_esi"/>
+                        <div class="o_row mw-50" name="employer_esi">
+                            <field name="employer_esi" class="oe_inline o_hr_narrow_field" nolabel="1"
+                                   widget="monetary"/>
+                            <div class="mb-3">/ Month</div>
+                        </div>
+                        <label for="bonus"/>
+                        <div class="o_row mw-50" name="bonus">
+                            <field name="bonus" class="oe_inline o_hr_narrow_field" nolabel="1" widget="monetary"/>
+                            <div class="mb-3">/ Year</div>
+                        </div>
+                        <label for="gratuity"/>
+                        <div class="o_row mw-50" name="bonus">
+                            <field name="gratuity" class="oe_inline o_hr_narrow_field" nolabel="1" widget="monetary"/>
+                            <div class="mb-3"> / Month</div>
+                        </div>
+
+                    </group>
+                    <group string="Annual Part">
+                        <label for="annual_g"/>
+                        <div class="o_row mw-50" name="annual_g">
+                            <field name="annual_g" class="oe_inline o_hr_narrow_field" nolabel="1" widget="monetary"/>
+                            <div class="mb-3">/ Year</div>
+                        </div>
+                        <label for="annual_pf"/>
+                        <div class="o_row mw-50" name="annual_pf">
+                            <field name="annual_pf" class="oe_inline o_hr_narrow_field" nolabel="1" widget="monetary"/>
+                            <div class="mb-3">/ Year</div>
+                        </div>
+                        <label for="annual_bonus"/>
+                        <div class="o_row mw-50" name="annual_bonus">
+                            <field name="annual_bonus" class="oe_inline o_hr_narrow_field" nolabel="1"
+                                   widget="monetary"/>
+                            <div class="mb-3">/ Year</div>
+                        </div>
+                        <label for="annual_gratuity"/>
+                        <div class="o_row mw-50" name="annual_gratuity">
+                            <field name="annual_gratuity" class="oe_inline o_hr_narrow_field" nolabel="1" widget="monetary"/>
+                            <div class="mb-3">/ Year</div>
+                        </div>
+                        <label for="ctc_yearly"/>
+                        <div class="o_row mw-50" name="ctc_yearly">
+                            <field name="ctc_yearly" class="oe_inline o_hr_narrow_field" nolabel="1" widget="monetary"/>
+                            <div class="mb-3">/ Year</div>
+                        </div>
+                        <label for="ctc_monthly"/>
+                        <div class="o_row mw-50" name="ctc_monthly">
+                            <field name="ctc_monthly" class="oe_inline o_hr_narrow_field" nolabel="1"
+                                   widget="monetary"/>
+                            <div class="mb-3">/ Month</div>
+                        </div>
+                    </group>
+                    <!-- For OT calculation from ohrms_overtime module -->
+                    <group string="Overtime">
+                        <label for="over_day"/>
+                        <div class="o_row" name="day_wage">
+                            <field name="over_day"/>
+                            <span>/day</span>
+                        </div>
+                        <label for="over_hour"/>
+                        <div class="o_row" name="hour_wage">
+                            <field name="over_hour"/>
+                            <span>/hour</span>
+                        </div>
+                    </group>
+                </group>
+            </xpath>
+            <field name="state" position="attributes">
+                <attribute name="tracking">1</attribute>
+            </field>
+        </field>
+    </record>
+
+    <record id="hr_contract_history_form_view_inherit" model="ir.ui.view">
+        <field name="name">hr.contract.history.inherit</field>
+        <field name="model">hr.contract.history</field>
+        <field name="inherit_id" ref="hr_contract.hr_contract_history_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/sheet/notebook/page[1]/field/tree/field[@name='wage']" position="after">
+                <field name="ctc_monthly"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="hr_contract_history_view_list_inherit" model="ir.ui.view">
+        <field name="name">hr.contract.history.inherit</field>
+        <field name="model">hr.contract.history</field>
+        <field name="arch" type="xml">
+            <tree string="Contracts" js_class="hr_contract_history_list"
+                  default_order = 'is_under_contract, date_start desc'
+                  edit="false" delete="false" duplicate="false"
+                  import="true">
+                <field name="employee_id" widget="many2one_avatar_employee"/>
+                <field name="date_hired"/>
+                <field name="is_under_contract" invisible="1"/>
+                <field name="name"/>
+                <field name="date_start"/>
+                <field string="Reference Working Time" name="resource_calendar_id" optional="hide"/>
+                <field name="under_contract_state" widget="state_selection" optional="hide"/>
+                <field name="structure_type_id" optional="hide"/>
+                <field name="currency_id" invisible="1"/>
+                <field name="wage" optional="hide"/>
+                <field name="state"
+                       widget="badge"
+                       decoration-info="state == 'draft'"
+                       decoration-warning="state == 'close'"
+                       decoration-success="state == 'open'"/>
+                <field name="contract_count"/>
+            </tree>
+        </field>
+    </record>
+
+
+    <record id="hr_contract.hr_contract_history_view_list_action" model="ir.actions.act_window">
+        <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('ld_hr_contract.hr_contract_history_view_list_inherit')}),
+                (0, 0, {'view_mode': 'kanban', 'view_id': ref('hr_contract.hr_contract_history_view_kanban')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('hr_contract.hr_contract_history_view_form')})]"/>
+
+    </record>
+
+</odoo>

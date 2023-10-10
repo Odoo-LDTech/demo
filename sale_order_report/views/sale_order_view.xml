@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<record id="sale_view_sale_order_inherit" model="ir.ui.view">
+		<field name="name">sale.order.inherit</field>
+		<field name="model">sale.order</field>
+		<field name="inherit_id" ref="sale.view_order_form"/>
+		<field name="arch" type="xml">
+			<field name="client_order_ref" position="after">
+				<field name="date_ref" />
+				<field name="broker_id" domain="[('is_broker','=',True)]"/>
+			</field>
+			<xpath expr="//group[@name='partner_details']/field[@name='partner_shipping_id']" position="attributes">
+				<attribute name="string">Delivery Address / Consignee</attribute>
+			</xpath>
+		</field>
+	</record>
+
+	<record id="account_move_form_inherit" model="ir.ui.view">
+		<field name="name">account.move.form.inherit</field>
+		<field name="model">account.move</field>
+		<field name="inherit_id" ref="account.view_move_form"/>
+		<field name="arch" type="xml">
+<!--		<xpath expr="//group[@name='partner_details']/field[@name='ref']" position="after">-->
+		<xpath expr="//field[@name='invoice_user_id']" position="before">
+			<field name="reference_date"/>
+			<field name="delivery_note"/>
+			<field name="other_references"/>
+			<field name="dispatch_doc_no"/>
+			<field name="delivery_note_date"/>
+			<field name="dispatched_through"/>
+			<field name="destination"/>
+			<field name="bill_of_lading"/>
+			<field name="moter_vehicle_no"/>
+			<field name="dispatch_doc_no"/>
+		</xpath>
+		</field>
+	</record>
+
+</odoo>

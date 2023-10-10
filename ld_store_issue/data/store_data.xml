@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- Sequences for Store Issue -->
+        <record id="seq_store_issue" model="ir.sequence">
+            <field name="name">Store Issue</field>
+            <field name="code">store.issue</field>
+            <field name="prefix">STORE/</field>
+            <field name="padding">4</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+    </data>
+</odoo>

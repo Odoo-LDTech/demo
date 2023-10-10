@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <!-- Skip Loan Installments Tree View -->
+        <record id="skip_loan_intallments_tree_view" model="ir.ui.view">
+            <field name="name">skip.loan.installment.tree</field>
+            <field name="model">skip.loan.installment</field>
+            <field name="arch" type="xml">
+                <tree string="Skip Loan Requests">
+                    <field name="employee_id"/>
+                    <field name="date"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Skip Loan Installments Form View -->
+        <record id="skip_loan_intallments_form_view" model="ir.ui.view">
+            <field name="name">skip.loan.installment.form</field>
+            <field name="model">skip.loan.installment</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button name="action_submit" type="object" string="Submit" states="draft" class="oe_highlight"/>
+                        <button name="action_cancel" type="object" string="Cancel" states="draft" />
+                        <button name="action_approve" type="object" string="Approve" states="waiting_approval_1" class="oe_highlight" groups="hr.group_hr_manager"/>
+                        <button name="action_double_approve" type="object" string="Approve" states="waiting_approval_2" class="oe_highlight" groups="account.group_account_user,account.group_account_manager"/>
+                        <button name="action_refuse" type="object" string="Refuse" states="waiting_approval_1,waiting_approval_2" class="oe_highlight" groups="hr.group_hr_manager"/>
+                        <field name="state" widget="statusbar" statusbar_visible="draft,waiting_approval_1,waiting_approval_2,approve" />
+                    </header>
+                    <sheet string="Skip Loan Requests">
+                        <group>
+                            <group>
+                                <field name="employee_id"/>
+                                <field name="emp_loan_id" invisible="1"/>
+                                <field name="date"/>
+                                <field name="loan_id" domain="['&amp;',('state', '=', 'approve'), ('id', 'in', emp_loan_id)]"/>
+                            </group>
+                            <group>
+                                <field name="department_id"/>
+                                <field name="job_position"/>
+                                <field name="installment_arrangements"/>
+                            </group>
+                        </group>
+                        <notebook>
+                        <page string="Installments">
+                            <field name="skip_loan_line_ids" force_save="True">
+                                <tree string="Installments" editable="bottom">
+                                    <field name="date" readonly="1" force_save="True"/>
+                                    <field name="amount"/>
+                                    <field name="skip_installment" attrs="{'readonly': ([('done_skiped_installments', '=', True)])}"/>
+                                    <field name="done_skiped_installments" attrs="{'readonly': ([('skip_installment', '=', False)])}"/>
+                                    <field name="paid" readonly="1" force_save="True" invisible="1"/>
+                                    <field name="loan_lines_id" readonly="1" force_save="True" invisible="1"/>
+                                </tree>
+                            </field>
+                        </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- Skip Loan Installments Actions  -->
+        <record id="action_hr_skip_loan_installments_request" model="ir.actions.act_window">
+            <field name="name">Skip Loan Installments</field>
+            <field name="res_model">skip.loan.installment</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+                    Skip Loan Installments
+                </p>
+            </field>
+        </record>
+
+        <!-- Add Skip Loan Installments Menu -->
+        <menuitem name="Skip Loan Installments"
+            id="menu_skip_loan_installment_request"
+            parent="ohrms_loan.menu_base_hr_loan_request"
+            action="action_hr_skip_loan_installments_request"
+            sequence="2"/>
+    </data>
+</odoo>

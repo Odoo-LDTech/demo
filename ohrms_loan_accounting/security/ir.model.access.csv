@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+ohrms_loan_accounting.access_skip_loan_installment,access_skip_loan_installment,ohrms_loan_accounting.model_skip_loan_installment,base.group_user,1,1,1,1
+ohrms_loan_accounting.access_skip_loan_line,access_skip_loan_line,ohrms_loan_accounting.model_skip_loan_line,base.group_user,1,1,1,1
+ohrms_loan_accounting.access_closed_loan,access_closed_loan,ohrms_loan_accounting.model_closed_loan,base.group_user,1,1,1,1

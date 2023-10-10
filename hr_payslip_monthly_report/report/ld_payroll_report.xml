@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="ld_payroll_report_wizard_form" model="ir.ui.view">
+        <field name="name">ld.payroll.report.wizard.form</field>
+        <field name="model">ld.payroll.report.wizard</field>
+        <field name="arch" type="xml">
+        <form>
+            <div class="alert alert-info mb-0" role="alert" style="display: flex;">
+                <div>
+                    <strong>SELECT ALL EMPLOYEES?
+                        <i class="fa fa-user" role="img" style="font-size:20px;"/>
+                        <field name="all_employees" widget="boolean_toggle"/>
+                    </strong>
+                </div>
+                <div style="margin-right:80px;"></div>
+                <br/>
+                <div>
+                    <strong>SELECT DATERANGE?
+                        <i class="fa fa-calendar" role="img" style="font-size:20px;"/>
+                        <field name="date_selected" widget="boolean_toggle"/>
+                    </strong>
+                </div>
+            </div>
+            <br/>
+            <group>
+                <group>
+                    <field name="emp_ids" widget="many2many_tags"/>
+                </group>
+                <group>
+                    <field name="from_date"
+                    attrs="{'invisible': [('date_selected', '!=', True)], 'required': [('date_selected', '=', True)]}"/>
+                    <field name="to_date"
+                    attrs="{'invisible': [('date_selected', '!=', True)], 'required': [('date_selected', '=', True)]}"/>
+                </group>
+            </group>
+            <footer>
+                <button string="Generate Xlsx" name="action_generate_xlsx_report" type="object" class="btn btn-info">
+                    <i class="fa fa-cloud-download" role="img"/> Generate Xlsx &amp; Download
+                </button>
+                <button string="Cancel" class="btn btn-danger" special="cancel">
+                    <i class="fa fa-close" role="img"/> Cancel
+                </button>
+
+            </footer>
+        </form>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_ld_payroll_wizard">
+        <field name="name">Payroll Report</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">ld.payroll.report.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="ld_payroll_report_wizard_form"/>
+    </record>
+
+    <record id="ld_payroll_report" model="ir.actions.report">
+        <field name="name">Payroll Report</field>
+        <field name="model">ld.payroll.report.wizard</field>
+        <field name="report_type">xlsx</field>
+        <field name="report_name">hr_payslip_monthly_report.report_ld_payroll</field>
+        <field name="report_file">hr_payslip_monthly_report.report_ld_payroll</field>
+        <field name="print_report_name">'payroll_report'</field>
+    </record>
+
+    <menuitem id="menu_ld_payroll_report" name="Payroll Report Xlsx"
+              parent="hr_payslip_monthly_report.menu_hr_payslip_reports"
+              sequence="15"
+              action="hr_payslip_monthly_report.action_ld_payroll_wizard"/>
+
+</odoo>

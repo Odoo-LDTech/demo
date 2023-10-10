@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="hr_payslip_run_form_inherit" model="ir.ui.view">
+        <field name="name">hr.payslip.run.form.inherit</field>
+        <field name="model">hr.payslip.run</field>
+        <field name="inherit_id" ref="hr_payroll_community.hr_payslip_run_form"/>
+        <field name="arch" type="xml">
+            <data>
+                <xpath expr="//field[@name='credit_note']" position="after">
+                    <newline/>
+                    <field name="available_advice" states="close"/>
+                </xpath>
+                <xpath expr="//button[@name='draft_payslip_run']" position="after">
+                    <button name="create_advice" string="Create Advice" type="object" states="close"/>
+                </xpath>
+<!--                <xpath expr="//button[@name='draft_payslip_run']" position="attributes">-->
+<!--                    <attribute name="attrs">{'invisible': [('state' ,'not in',['close'] )]}</attribute>-->
+<!--                </xpath>-->
+            </data>
+        </field>
+    </record>
+
+    <record id="hr_payroll_community.hr_payslip_run_form" model="ir.ui.view">
+        <field name="name">hr.payslip.run.form</field>
+        <field name="model">hr.payslip.run</field>
+        <field name="arch" type="xml">
+            <form string="Payslips Batches">
+            <header>
+                <button name="close_payslip_run" type="object" string="Close" states="draft" class="oe_highlight"/>
+                <button name="%(hr_payroll_community.action_hr_payslip_by_employees)d" type="action" states="draft" string="Generate Payslips" class="oe_highlight"/>
+                <button string="Set to Draft" name="draft_payslip_run" type="object" states="draft" />
+                <field name="state" widget="statusbar"/>
+            </header>
+            <sheet>
+                <label for="name" class="oe_edit_only"/>
+                <h1>
+                    <field name="name"  attrs="{'readonly': [('state', '=', 'close')]}"/>
+                </h1>
+                <group col="4" attrs="{'readonly': [('state', '=', 'close')]}">
+                    <label for="date_start" string="Period"/>
+                     <div>
+                           <field name="date_start" class="oe_inline"/> - <field name="date_end" class="oe_inline"/>
+                     </div>
+                    <field name="credit_note"/>
+                </group>
+                <separator string="Payslips"/>
+                <field name="slip_ids"  attrs="{'readonly': [('state', '=', 'close')]}"/>
+            </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_hr_bank_advice_tree" model="ir.ui.view">
+        <field name="name">hr.payroll.advice.tree</field>
+        <field name="model">hr.payroll.advice</field>
+        <field name="arch" type="xml">
+            <tree string="Bank Advice">
+                <field name="name" readonly="1"/>
+                <field name="date" readonly="1"/>
+                <!--                <field name="number"/>-->
+                <field name="bank_id" readonly="1"/>
+<!--                <field name="state"/>-->
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_hr_bank_advice_form" model="ir.ui.view">
+        <field name="name">hr.payroll.advice.form</field>
+        <field name="model">hr.payroll.advice</field>
+        <field name="arch" type="xml">
+            <form string="Bank Advice">
+                <header>
+<!--                    <button name="confirm_sheet" string="Confirm Sheet" states="draft" type="object"-->
+<!--                            class="oe_highlight"/>-->
+                    <!--                    <button name="compute_advice" string="Compute Advice" states="draft" type="object"-->
+                    <!--                            class="oe_highlight"/>-->
+<!--                    <button name="cancel_sheet" string="Cancel Advice" states="draft" type="object"/>-->
+<!--                    <button name="set_to_draft" string="Set to Draft" states="cancel,confirm" type="object"/>-->
+<!--                    <div class="oe_right">-->
+<!--                        <field name="state" widget="statusbar" nolabel="1" statusbar_visible="draft"/>-->
+<!--                    </div>-->
+<!--                    <div class="oe_clear"/>-->
+                </header>
+                <sheet>
+                    <group>
+                        <label for="name" class="oe_edit_only" string="Name"/>
+                        <h2>
+                            <field name="name" readonly="1"/>
+                        </h2>
+
+                        <group colspan="3" col="6">
+                            <field name="bank_id" readonly="1"/>
+                            <field name="date" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook colspan="4">
+                        <page string="Payment Lines" name="payment_lines">
+                            <field name="line_ids" colspan="4" nolabel="1">
+                                <tree string="Payment Lines" editable="bottom">
+                                    <field name="employee_id" readonly="1"/>
+                                    <field name="name" readonly="1"/>
+                                    <field name="ifsc" invisible="1" readonly="1"/>
+                                    <field name="ifsc_bank_code" force_save="1" readonly="1"/>
+                                    <field name="bysal" string="Amount" readonly="1"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_view_hr_bank_advice_tree" model="ir.actions.act_window">
+        <field name="name">Payment Advices</field>
+        <field name="res_model">hr.payroll.advice</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_hr_bank_advice_tree"/>
+    </record>
+
+    <menuitem name="Payment Advice"
+              action="action_view_hr_bank_advice_tree"
+              id="hr_menu_payment_advice"
+              parent="hr_payroll_community.menu_hr_payroll_community_root"
+    />
+
+    <record id="view_advice_line_form" model="ir.ui.view">
+        <field name="name">advice.line.form</field>
+        <field name="model">hr.payroll.advice.line</field>
+        <field name="arch" type="xml">
+            <form string="Advice Lines">
+                <sheet>
+                    <label for="advice_id" class="oe_edit_only"/>
+                    <h1>
+                        <field name="advice_id"/>
+                    </h1>
+                    <group>
+                        <field name="employee_id"/>
+                        <field name="name"/>
+                        <field name="ifsc" invisible="1"/>
+                        <field name="ifsc_bank_code"/>
+                        <field name="bysal"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+</odoo>

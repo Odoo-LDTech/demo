@@ -1,0 +1,21 @@
+{
+    'name': 'Vikram Store Issue',
+    'version': '16.0.1',
+    'summary': 'Store Issue',
+    'description': """Store Issue""",
+    'category': 'Store',
+    'author': 'Live digital marketing solutions pvt ltd',
+    'website': 'https://www.ldtech.in/',
+    'depends': ['base', 'mail', 'stock'],
+    'data': [
+        'security/ir.model.access.csv',
+        'data/store_data.xml',
+        'views/store_views.xml',
+        'views/stock_picking_views.xml',
+        'wizard/material_issue_reject_remarks_views.xml',
+    ],
+    'demo': [],
+    'application': True,
+    'auto_install': False,
+    'licence': 'LGPL-3',
+}

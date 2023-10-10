@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <record id="reject_reason_wizard_view_form" model="ir.ui.view">
+        <field name="name">reject_reason.form</field>
+        <field name="model">reject.reason</field>
+        <field name="arch" type="xml">
+            <form string="Test">
+                <sheet>
+                    <group class="oe_title">
+                        <field name="reason_for_reject"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button string="Cancel" class="btn-primary" special="cancel"/>
+                    <button string="Confirm" class="btn-primary" type="object" name="action_confirm"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>
+
+

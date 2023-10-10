@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<odoo>
+    <!--    <record id="view_employee_form_inherit" model="ir.ui.view">-->
+    <!--        <field name="name">view.employee.form.inherit</field>-->
+    <!--        <field name="model">hr.employee</field>-->
+    <!--        <field name="inherit_id" ref="hr.view_employee_form"/>-->
+    <!--        <field name="arch" type="xml">-->
+    <!--            <xpath expr="//form/sheet/notebook/page/group/group/field[@name='country_of_birth']" position="after">-->
+    <!--                <field name="pan_number"/>-->
+    <!--                <field name="esic"/>-->
+    <!--                <field name="uan"/>-->
+    <!--            </xpath>-->
+    <!--        </field>-->
+    <!--    </record>-->
+    <record id="view_payslip_form_inherit" model="ir.ui.view">
+        <field name="name">Hr Payslip</field>
+        <field name="model">hr.payslip</field>
+        <field name="inherit_id" ref="hr_payroll_community.view_hr_payslip_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/sheet/group/field[@name='contract_id']" position="before">
+                <field name="employee"/>
+                <field name="payable_days"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="hr_payroll_community.action_report_payslip" model="ir.actions.report">
+        <field name="binding_model_id" eval="False"/>
+    </record>
+
+    <record id="hr_payroll_community.payslip_details_report" model="ir.actions.report">
+        <field name="binding_model_id" eval="False"/>
+    </record>
+
+</odoo>

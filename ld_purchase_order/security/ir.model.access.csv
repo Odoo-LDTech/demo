@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_purchase_indent,purchase.indent,model_purchase_indent,,1,1,1,0
+access_product_details,product.details,model_product_details,,1,1,1,1
+access_reject_remark,reject.remark,model_reject_remark,,1,1,1,1
+access_pi_quotation,pi.quotation,model_pi_quotation,,1,1,1,1

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Inherit Form View to Modify it -->
+<odoo>
+    <data>
+        <record id="hr_view_leave_type_form_inherited" model="ir.ui.view">
+            <field name="name">hr.leave.type.form.inherited</field>
+            <field name="model">hr.leave.type</field>
+            <field name="inherit_id" ref="hr_holidays.edit_holiday_status_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//field[@name='employee_requests']" position="after">
+                    <field name="is_it_casual" invisible="1"/>
+                    <field name="employee_type_stages_probation" />
+                    <field name="employee_type_stages_regular" />
+                    <field name="employee_type_stages_notice_period" />
+                </xpath>
+
+            </field>
+        </record>
+
+    </data>
+
+
+</odoo>

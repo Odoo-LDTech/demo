@@ -1,0 +1,414 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <template id="account_external_layout_bold">
+
+        <t t-if="not o" t-set="o" t-value="doc"/>
+
+        <t t-if="not company">
+            <!-- Multicompany -->
+            <t t-if="company_id">
+                <t t-set="company" t-value="company_id"/>
+            </t>
+            <t t-elif="o and 'company_id' in o and o.company_id.sudo()">
+                <t t-set="company" t-value="o.company_id.sudo()"/>
+            </t>
+            <t t-else="else">
+                <t t-set="company" t-value="res_company"/>
+            </t>
+        </t>
+
+        <div t-attf-class="header o_company_#{company.id}_layout" t-att-style="report_header_style">
+            <div class="o_clean_header">
+                <div class="row">
+                    <div class="col-6">
+                        <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" alt="Logo"/>
+                    </div>
+                    <div class="col-5 offset-1" name="company_address">
+                        <t t-if="o.move_type != 'in_invoice'">
+                            <span t-if="company.so_company_details" t-field="company.so_company_details"></span>
+                        </t>
+                        <t t-else="">
+                            <span t-if="company.po_company_details" t-field="company.po_company_details"></span>
+                        </t>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div t-attf-class="article o_report_layout_bold o_company_#{company.id}_layout {{  'o_report_layout_background' if company.layout_background in ['Geometric', 'Custom']  else  '' }}"
+             t-attf-style="background-image: url({{ 'data:image/png;base64,%s' % company.layout_background_image.decode('utf-8') if company.layout_background_image and company.layout_background == 'Custom' else ('/base/static/img/bg_background_template.jpg' if company.layout_background == 'Geometric' else '') }});"
+             t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id"
+             t-att-data-oe-lang="o and o.env.context.get('lang')">
+            <t t-call="web.address_layout"/>
+            <t t-out="0"/>
+        </div>
+
+        <div t-attf-class="footer o_clean_footer o_company_#{company.id}_layout">
+            <div class="row mt32" style="margin-top:32px !important">
+                <div class="col-12 text-center">
+                    <span style="font-size:15px">
+                        <t t-if="o.move_type != 'in_invoice'">
+                            <t t-esc="company.so_footer_line1"/>
+                        </t>
+                        <t t-else="">
+                            <t t-esc="company.po_footer_line1"/>
+                        </t>
+
+                    </span>
+                    <br/>
+                    <span style="font-size:15px">
+                        <t t-if="o.move_type != 'in_invoice'">
+                            <t t-esc="company.so_footer_line2"/>
+                        </t>
+                        <t t-else="">
+                            <t t-esc="company.po_footer_line2"/>
+                        </t>
+                    </span>
+                </div>
+                <!--                <div class="col-4">-->
+                <!--                    <span t-if="company.company_details" t-field="company.company_details"/>-->
+                <!--                </div>-->
+                <!--                <div class="col-3">-->
+                <!--                    <div class="mt0 mb0 h5" t-field="company.report_header"/>-->
+                <!--                </div>-->
+                <!--                <div class="col-1">-->
+                <!--                    <ul t-if="report_type == 'pdf'" class="list-inline pagenumber float-end text-center">-->
+                <!--                        <li class="list-inline-item"><strong><span class="page"/></strong></li>-->
+                <!--                    </ul>-->
+                <!--                </div>-->
+            </div>
+        </div>
+    </template>
+
+    <template id="report_invoice_document">
+            <t t-call="sale_order_report.account_external_layout_bold">
+                <t t-set="o" t-value="o.with_context(lang=lang)" />
+
+                    <div class="page">
+
+                        <style>
+                            th, td ,tr {
+                                border-collapse: collapse;
+                            }
+                            th , td {
+                                padding: 5px !important;
+                                margin: 0px !important;
+                            }
+                            table,tr,th,td{
+                                border:1px solid black;
+                            }
+                        </style>
+
+                        <h3 class="text-center">
+                            Tax Invoice
+                        </h3>
+
+                        <table style="font-size:12px;width:100%;text-align: left;">
+                            <tr>
+                                <td style="width:50%;" rowspan="3">
+                                    <strong><t t-esc="o.company_id.name"/></strong><br/>
+                                    <div t-if="o.company_id.street">
+                                        <t t-esc="o.company_id.street"/>
+                                    </div>
+                                    <div t-if="o.company_id.city">
+                                        <t t-esc="o.company_id.city" />
+                                        <t t-esc="o.company_id.zip" />
+                                    </div>
+                                    <div t-if="o.company_id.state_id">
+                                        <t t-esc="o.company_id.state_id.name" />, <t t-esc="o.company_id.state_id.code" />
+                                    </div>
+                                    <div t-if="o.company_id.country_id">
+                                        <t t-esc="o.company_id.country_id.name" />
+                                    </div>
+                                    <div t-if="o.company_id.vat">
+                                        CIN : <t t-esc="o.company_id.vat" />
+                                    </div>
+                                    <div t-if="o.company_id.email">
+                                        E-mail : <t t-esc="o.company_id.email" />
+                                    </div>
+                                </td>
+                                <td style="width:25%;">
+                                    Invoice No. <br/>
+                                    <strong><t t-esc="o.name" /></strong>
+                                </td>
+                                <td style="width:25%;">
+                                    Dated <br/>
+                                    <strong><t t-esc="o.create_date" /></strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Delivery Note <br/>
+                                    <strong><t t-esc="o.delivery_note" /></strong>
+                                </td>
+                                <td>
+                                    Mode/Terms of Payment<br/>
+                                    <strong><t t-esc="o.invoice_payment_term_id.name" /></strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Reference No. &amp; Date<br/>
+                                    <strong t-if="o.ref"><t t-esc="o.ref"/> &amp; <t t-esc="o.reference_date"/></strong>
+                                </td>
+                                <td>
+                                    Other References<br/>
+                                    <strong><t t-esc="o.other_references" /></strong>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td rowspan="3">
+                                    Consignee (Ship to) <br/>
+                                    <strong><t t-esc="o.partner_id.name"/></strong><br/>
+                                    <div t-if="o.partner_id.street">
+                                        <t t-esc="o.partner_id.street"/>
+                                    </div>
+                                    <div t-if="o.partner_id.city">
+                                        <t t-esc="o.partner_id.city" />
+                                        <t t-esc="o.partner_id.zip" />
+                                    </div>
+                                    <div t-if="o.partner_id.state_id">
+                                        <t t-esc="o.partner_id.state_id.name" />, <t t-esc="o.partner_id.state_id.code" />
+                                    </div>
+                                    <div t-if="o.partner_id.country_id">
+                                        <t t-esc="o.partner_id.country_id.name" />
+                                    </div>
+                                </td>
+                                <td>
+                                    Buyer's Order No.<br/>
+<!--                                    <strong><t t-esc="o.create_date" /></strong>-->
+                                </td>
+                                <td>
+                                    Dated<br/>
+<!--                                    <strong><t t-esc="o.create_date" /></strong>-->
+                                </td>
+                            </tr>
+                            <tr>
+                                <td >
+                                    Dispatch Doc No.<br/>
+                                    <strong><t t-esc="o.dispatch_doc_no" /></strong>
+                                </td>
+                                <td>
+                                    Delivery Note Date<br/>
+                                    <strong><t t-esc="o.delivery_note_date" /></strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Dispatched through<br/>
+                                    <strong><t t-esc="o.dispatched_through" /></strong>
+                                </td>
+                                <td>
+                                    Destination<br/>
+                                    <strong><t t-esc="o.destination" /></strong>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td rowspan="3">
+                                    Buyer (Bill to) <br/>
+                                    <strong><t t-esc="o.partner_shipping_id.name"/></strong><br/>
+                                    <div t-if="o.partner_shipping_id.street">
+                                        <t t-esc="o.partner_shipping_id.street"/>
+                                    </div>
+                                    <div t-if="o.partner_shipping_id.city">
+                                        <t t-esc="o.partner_shipping_id.city" />
+                                        <t t-esc="o.partner_shipping_id.zip" />
+                                    </div>
+                                    <div t-if="o.partner_shipping_id.state_id">
+                                        <t t-esc="o.partner_shipping_id.state_id.name" />, <t t-esc="o.partner_shipping_id.state_id.code" />
+                                    </div>
+                                    <div t-if="o.partner_shipping_id.country_id">
+                                        <t t-esc="o.partner_shipping_id.country_id.name" />
+                                    </div>
+                                </td>
+                                <td>
+                                    Bill of Lading/LR-RR No.<br/>
+                                    <strong><t t-esc="o.bill_of_lading" /></strong>
+                                </td>
+                                <td>Moter Vehicle No.<br/>
+                                    <strong><t t-esc="o.moter_vehicle_no" /></strong>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" rowspan="2" style="border-bottom:1px !important">
+                                    Dispatch Doc No.<br/>
+                                    <strong><t t-esc="o.dispatch_doc_no" /></strong>
+                                </td>
+                            </tr>
+
+
+                        </table>
+
+                        <table class="table" style="width:100%;font-size: 12px;margin-top:16px;margin-bottom:0px !important;padding-bottom:0px !important">
+                            <tbody style="border-top: 1px solid black;border-bottom: 1px solid black;border-top: 1px solid black;">
+                                <td style="width:50%;border-bottom:1px !important"><strong>Description</strong></td>
+                                <td style="width:14%;border-bottom:1px !important;text-align:center"><strong>Quantity</strong></td>
+                                <td style="width:15%;border-bottom:1px !important;text-align:center"><strong>Rate</strong></td>
+                                <td style="width:21%;border-bottom:1px !important;text-align:center"><strong>Amount(Rs)</strong></td>
+                            </tbody>
+                            <tbody>
+                                <t t-foreach="o.invoice_line_ids" t-as="line">
+                                    <tr>
+                                        <td style="text-align:left;border-bottom:1px !important">
+                                            <t t-esc="line.name"/>
+                                        </td>
+                                        <td style="text-align: center;border-bottom:1px !important">
+                                            <t t-esc="line.quantity"/>
+                                        </td>
+                                        <td style="text-align: right;border-bottom:1px !important">
+                                            <t t-esc="line.price_unit"/>
+                                        </td>
+                                        <td style="text-align: right;border-bottom:1px !important">
+                                            <t t-esc="line.price_subtotal"/>
+                                        </td>
+                                    </tr>
+                                </t>
+<!--                                <tr>-->
+<!--                                    <td>-->
+<!--                                        Amount Chargeable (in words) <br/>-->
+<!--                                        <strong>(<t t-esc="o.amount_num2word(o.amount_total)"/>)</strong>-->
+<!--                                    </td>-->
+<!--                                    <td>-->
+<!--                                        <t t-set="tax_totals" t-value="o.tax_totals" />-->
+<!--                                            <t t-call="account.document_tax_totals" />-->
+<!--                                    </td>-->
+<!--                                </tr>-->
+                            </tbody>
+                        </table>
+
+                         <div class="clearfix" name="so_total_summary" style="font-size:12px;margin-top:0px !important;padding-top:0px !important;">
+                                <div id="total" class="row" name="total" style="border:1px solid black;border-right:0px !important;margin-top:0px !important;padding-top:0px !important;">
+                                    <div class="col-6">
+                                        Amount Chargeable (in words) <br/>
+                                        <strong>(<t t-esc="o.amount_num2word(o.amount_total)"/>)</strong>
+                                    </div>
+                                    <div class="col-6">
+                                        <table class="table table-sm" style="border:0px !important;font-size:12px !important;">
+                                            <!-- Tax totals -->
+                                            <t t-set="tax_totals" t-value="o.tax_totals" />
+
+                                            <t t-foreach="tax_totals['subtotals']" t-as="subtotal">
+                                                <tr class="border-black o_subtotal">
+                                                    <td style="border-top:0px !important;"><strong t-esc="subtotal['name']"/></td>
+
+                                                    <td class="text-end" style="border-right:0px !important">
+                                                        <span
+                                                            t-att-class="oe_subtotal_footer_separator"
+                                                            t-esc="subtotal['formatted_amount']"
+                                                        />
+                                                    </td>
+                                                </tr>
+
+                                                <t t-set="subtotal_to_show" t-value="subtotal['name']"/>
+                                                <t t-call="account.tax_groups_totals"/>
+                                            </t>
+
+                                            <!--Total amount with all taxes-->
+                                            <tr class="border-black o_total">
+                                                <td style="border-bottom:0px !important"><strong>Total</strong></td>
+                                                <td class="text-end" style="border-bottom:0px !important">
+                                                    <span t-esc="tax_totals['formatted_amount_total']"/>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                                 <table class="table" style="width:100%;font-size: 12px;margin-top:16px;border-bottom:0px !important">
+<!--                                     <tbody>-->
+<!--                                <tr>-->
+<!--                                    <td colspan="4">-->
+<!--                                         Amount Chargeable (in words) :-->
+<!--                                        <strong><t t-esc="o.amount_num2word(o.amount_total)"/></strong>-->
+<!--                                    </td>-->
+<!--                                </tr>-->
+                                <tr>
+                                    <td colspan="4">
+                                        Tax Amount (in words) : <strong><t t-esc="o.amount_num2word(o.amount_tax)"/></strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4">
+                                        Company's PAN : <strong><t t-esc="o.company_id.vat" /></strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4">
+                                        Declaration : <br/>
+                                        We declare that this invoice shows the actual price of the goods described and that all particulars are true and correct.
+                                    </td>
+                                </tr>
+                                         <tr style="border-bottom:1px !important">
+                                    <td colspan="4" style="border-bottom:1px !important">
+                                        <div class="row">
+                                            <div class="col-6">
+                                                Customer's Seal and Signature
+                                            </div>
+                                            <div class="col-6 text-right" style="text-align:right">
+                                                for M/s <t t-esc="o.company_id.name" />
+                                            </div>
+                                        </div>
+                                        <div class="row" style="padding-top:50px">
+                                            <div class="col-6">
+                                            </div>
+                                            <div class="col-2">
+                                                Prepared By
+                                            </div>
+                                            <div class="col-2">
+                                                Verified By
+                                            </div>
+                                            <div class="col-2">
+                                                Authorised Signatory
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+<!--                            </tbody>-->
+                        </table>
+
+                <p class="text-center" style="font-size:15px;"> SUBJECT TO ROURKELA JURISDICTION </p>
+                <p class="text-center" style="font-size:15px;margin-top:0px !important;;padding-top:0px !important;"> This is Computer Generated Invoice </p>
+
+<!--                         <div class="clearfix" name="account_total_summary" style="font-size:13px;">-->
+<!--                                <div id="total" class="row" name="total">-->
+<!--                                    <div class="col-6" style="padding:5px;">-->
+<!--                                        Amount Chargeable (in words) <br/>-->
+<!--                                        <strong>(<t t-esc="o.amount_num2word(o.amount_total)"/>)</strong>-->
+<!--                                    </div>-->
+<!--                                    <div class="col-6">-->
+<!--                                        <table class="table table-sm table-borderless">-->
+<!--                                            &lt;!&ndash; Tax totals &ndash;&gt;-->
+<!--                                            <t t-set="tax_totals" t-value="o.tax_totals" />-->
+<!--                                            <t t-call="account.document_tax_totals" />-->
+<!--                                        </table>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+
+<!--                        <div class="row">-->
+<!--                             <div class="col-12 border" style="padding:5px">-->
+<!--                                 <span></span>Tax Amount (in words) : <br/>-->
+<!--                                        <span></span>Company's PAN : <br/>-->
+<!--                                        <span></span>Declaration : <br/>-->
+<!--                                       <span></span> We declare that this invoice shows the actual price of the goods described and that all particulars are true and correct.-->
+<!--                                    </div>-->
+<!--                        </div>-->
+                    </div>
+            </t>
+        </template>
+
+    <template id="report_invoice_with_payments_custom">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-set="lang" t-value="o.partner_id.lang"/>
+                    <t t-set="print_with_payments" t-value="True"/>
+                    <t t-call="sale_order_report.report_invoice_document" t-lang="lang"/>
+                </t>
+            </t>
+    </template>
+
+</odoo>

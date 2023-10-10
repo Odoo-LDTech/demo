@@ -1,0 +1,151 @@
+<odoo>
+    <data>
+        <template id="purchase_indent_report_document">
+            <t t-set="o" t-value="o.with_context(lang=lang)"/>
+            <div class="page">
+
+                <!--                <p style="font-size:18px;text-align:left">-->
+                <style>
+                    table, th, td {
+                    border: 1px solid black;
+                    border-collapse: collapse;
+                    }
+                    <!--                    th, td {-->
+                    <!--                    padding-top: 10px;-->
+                    <!--                    padding-bottom: 10px;-->
+                </style>
+                <table style="width:100%">
+
+                    <tr>
+                        <td style="width: 15%;float:left;padding-bottom: 1px">
+                            <img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)"
+                                 class="float-left" alt="Logo"
+                                 style="text-align:left;max-width:150px;max-height:160px;"/>
+                        </td>
+                        <td style="text-align:center;font-size:18px;width:60%;">
+                            <b>
+                                <t t-esc="o.company_id.name"/>
+                            </b>
+                        </td>
+                        <td style="text-align:left;font-size:18px;width:25%;">
+                            <b>Indent No:</b>
+                            <t t-esc="o.name"/>
+                            <br/>
+                            <b>Indent Date:</b>
+                            <t t-esc="o.indent_date"/>
+
+                        </td>
+                    </tr>
+
+                </table>
+                <br/>
+
+                <div style="text-align:center;font-size:18px;width:100%;">
+                    <b>Purchase Indent</b>
+                </div>
+
+                <br/>
+
+                <table>
+                    <thead>
+
+                        <tr>
+                            <th style="text-align:left;font-size:18px;width:7%;">
+                                <b>Requested By:</b>
+                                <t t-esc="o.employee_id.name"/>
+
+                            </th>
+                            <th style="text-align:left;font-size:18px;width:7%;">
+                                <b>Indent Type:</b>
+                                <t t-esc="o.indent_type"/>
+
+                            </th>
+                            <tr>
+                                <th style="text-align:left;font-size:18px;width:7%;">
+                                    <b>Department ID:</b>
+                                    <t t-esc="o.department_id.name"/>
+
+                                </th>
+                                <th style="text-align:left;font-size:18px;width:7%;">
+                                    <b>Material Required Date:</b>
+                                    <t t-esc="o.employee_id.name"/>
+
+                                </th>
+                            </tr>
+                            <tr>
+                                <th style="text-align:left;font-size:18px;width:7%;">
+                                    <b>HOD:</b>
+                                    <t t-esc="o.hod_id.name"/>
+
+                                </th>
+                                <th style="text-align:left;font-size:18px;width:7%;">
+                                    <b>Delivery Location:</b>
+                                    <t t-esc="o.delivery_location"/>
+
+                                </th>
+                            </tr>
+                        </tr>
+                    </thead>
+                </table>
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="text-align:center;font-size:18px;width:7%;">
+                                <b>S NO:</b>
+                            </th>
+                            <th style="text-align:center;font-size:18px;width:7%;">
+                                <b>Product Code</b>
+                            </th>
+                            <th style="text-align:center;font-size:18px;width:7%;">
+                                <b>Product Name</b>
+                            </th>
+                            <th style="text-align:center;font-size:18px;width:7%;">
+                                <b>Req Qty</b>
+                            </th>
+                            <th style="text-align:center;font-size:18px;width:7%;">
+                                <b>UOM</b>
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <t t-set="i" t-value="1"/>
+                        <t t-foreach="o.prod_ids" t-as="l">
+                            <tr>
+                                <td style="text-align:center;font-size:18px;width:7%;">
+                                    <span t-esc="i"/>
+                                    <t t-set="i" t-value="i+1"/>
+                                </td>
+                                <td style="text-align:center;font-size:18px;width:7%;">
+                                    <t t-esc="l.code"/>
+                                </td>
+                                <td style="text-align:center;font-size:18px;width:7%;">
+                                    <t t-esc="l.product_id.name"/>
+                                </td>
+                                <td style="text-align:center;font-size:18px;width:7%;">
+                                    <t t-esc="l.product_qty"/>
+                                </td>
+                                <td style="text-align:center;font-size:18px;width:7%;">
+                                    <t t-esc="l.product_uom.name"/>
+                                </td>
+
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+
+            </div>
+
+        </template>
+
+        <template id="indent_report">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="ld_purchase_indent_report.purchase_indent_report_document"/>
+                </t>
+            </t>
+        </template>
+
+
+    </data>
+</odoo>

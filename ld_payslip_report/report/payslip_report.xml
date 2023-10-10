@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <!--    <record id="payslip_report_admin_action" model="ir.actions.report">-->
+    <!--        <field name="name">print_payslip_report</field>-->
+    <!--        <field name="model">hr.payslip</field>-->
+    <!--        <field name="report_type">qweb-pdf</field>-->
+    <!--        <field name="report_name">ld_payslip_report.report_hr_payslip</field>-->
+    <!--        <field name="report_file">ld_payslip_report.report_payslip</field>-->
+    <!--        <field name="binding_model_id" ref="model_hr_payslip"/>-->
+    <!--        <field name="binding_type">report</field>-->
+    <!--    </record>-->
+    <record id="payslip_report_custom_action" model="ir.actions.report">
+        <field name="name">Payslip Report</field>
+        <field name="model">hr.payslip</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">ld_payslip_report.report_payslip</field>
+        <field name="report_file">ld_payslip_report.report_payslip</field>
+        <field name="binding_model_id" ref="hr_payroll_community.model_hr_payslip"/>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>

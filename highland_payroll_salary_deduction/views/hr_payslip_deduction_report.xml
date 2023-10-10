@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="hr_payslip_deduction_report_view" model="ir.ui.view">
+            <field name="name">hr.payslip.deduction.report.view</field>
+            <field name="model">hr.payroll.deduction.report</field>
+            <field name="arch" type="xml">
+                <tree string="Deduction Report">
+                    <field name="id" invisible="1"/>
+                    <field name="name"/>
+                    <field name="employee_code"/>
+                    <field name="payable_days"/>
+                    <field name="payslip_name"/>
+                    <!--                    <field name="start_date"/>-->
+                    <!--                    <field name="end_date"/>-->
+                    <field name="date_from"/>
+                    <field name="date_to"/>
+                    <field name="esi"/>
+                    <field name="pf"/>
+                    <field name="vpf"/>
+                    <field name="professional_tax"/>
+                    <field name="income_tax"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="hr_payroll_report_view_search_deduction" model="ir.ui.view">
+            <field name="name">hr.payslip.hr.payroll.deduction.report</field>
+            <field name="model">hr.payroll.deduction.report</field>
+            <field name="arch" type="xml">
+                <search string="Payslip Analysis Deduction">
+                    <field name="name"/>
+                    <field name="date_from"/>
+                    <field name="date_to"/>
+                    <field name="start_date" invisible="1"/>
+                    <field name="end_date" invisible="1"/>
+                    <filter string="This Month" name="thismonth"
+                            domain="[('date_from','&gt;=',time.strftime('%%Y-%%m-01'))]"/>
+                    <filter string="This Year" name="year"
+                            domain="[('date_from','&lt;=', time.strftime('%%Y-12-31')),('date_from','&gt;=',time.strftime('%%Y-01-01')),('date_to','&lt;=', time.strftime('%%Y-12-31')),('date_to','&gt;=',time.strftime('%%Y-01-01'))]"/>
+                    <separator/>
+                    <group expand="1" string="Group By">
+                        <filter string="Employee" name="Employee" context="{'group_by':'name'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+
+        <record id="action_hr_payslip_view_report_deduction" model="ir.actions.act_window">
+            <field name="res_model">hr.payroll.deduction.report</field>
+            <field name="name">Payslips Deduction Report</field>
+            <field name="view_mode">tree</field>
+            <field name="context">{'search_default_year':1 }</field>
+            <field name="target">current</field>
+            <field name="help">This report helps in payroll analysis. This helps you to check your pay slips and sorting
+                it out from different group
+                criteria (Employee, Job title, Department, Company, Pay slip etc.).
+            </field>
+        </record>
+
+        <menuitem
+                id="menu_hr_payslip_view_report_deduction"
+                name="Deduction ReportS"
+                parent="hr_payslip_monthly_report.menu_hr_payslip_reports"
+                sequence="11"/>
+
+        <menuitem
+                id="menu_hr_payslip_view_report_deduction_main"
+                name="Payslip Deduction Report"
+                parent="menu_hr_payslip_view_report_deduction"
+                action="action_hr_payslip_view_report_deduction"
+                sequence="11"/>
+        <!--        ===================================================================================-->
+        <record id="resource_calendar_form_inherit11" model="ir.ui.view">
+            <field name="name">monthly.pf.report.wizard.form</field>
+            <field name="model">monthly.pf.report.wizard</field>
+            <field name="arch" type="xml">
+                <form string="MONTHLY PF STATEMENT">
+                    <sheet>
+                        <group>
+                            <field invisible="1" name="state"/>
+                            <group states="choose">
+                                <field name="date_from"/>
+                                <field name="date_to"/>
+                            </group>
+                            <div states="get">
+                                <group>
+                                    <field name="name" colspan="4" invisible="1"/>
+                                    <field name="report" filename="name" colspan="4"/>
+                                </group>
+                            </div>
+                            <group states="choose">
+                                <field name="all_employee"/>
+                                <field name="employee_id" widget="many2many_tags"
+                                       attrs="{ 'invisible': [('all_employee', '!=',False)]}"/>
+                                <field name="deduction_state"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <footer states="choose">
+                        <button name="generate_deduction_report" string="Confirm" type="object"
+                                class="btn-primary"/>
+
+                        <button string="Cancel" class="btn-default" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_hr_payslip_view_report_deduction11" model="ir.actions.act_window">
+            <field name="res_model">monthly.pf.report.wizard</field>
+            <field name="name">Download Deduction Report</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="resource_calendar_form_inherit11"/>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem
+                id="menu_hr_payslip_view_report_deduction1"
+                name="Download Deduction Report"
+                parent="menu_hr_payslip_view_report_deduction"
+                action="action_hr_payslip_view_report_deduction11"
+                sequence="20"/>
+
+    </data>
+</odoo>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Inherit Form View to Modify it -->
+<odoo>
+    <data noupdate="1">
+        <!-- Casual leave -->
+        <record id="holiday_status_causal_leave" model="hr.leave.type">
+            <field name="name">Causal Timeoff</field>
+            <field name="requires_allocation">yes</field>
+            <field name="leave_validation_type">both</field>
+            <field name="is_it_casual">True</field>
+            <field name="icon_id" ref="hr_holidays.icon_14"/>
+            <field name="color">2</field>
+        </record>
+
+
+    </data>
+</odoo>

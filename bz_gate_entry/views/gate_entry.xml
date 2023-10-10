@@ -1,0 +1,200 @@
+<odoo>
+    <record id="view_gate_entry_tree" model="ir.ui.view">
+        <field name="name">gate.entry.tree</field>
+        <field name="model">gate.entry</field>
+        <field name="arch" type="xml">
+            <tree string="Gate Entry">
+                <field name="name"/>
+                <field name="date"/>
+                <field name="driver_name"/>
+                <field name="vehicle_number"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+    <record id="view_gate_entry_form" model="ir.ui.view">
+        <field name="name">gate.entry.form</field>
+        <field name="model">gate.entry</field>
+        <field name="arch" type="xml">
+            <form string="Gate Entry">
+                <header>
+                    <button name="action_validate" states="draft" string="Validate" type="object" class="oe_highlight"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,validate"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1" attrs="{'readonly': [('state','=','validate')]}"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="employee_id"/>
+                            <field name="entry_type" attrs="{'readonly': [('state','=','validate')]}"/>
+                            <field name="date"/>-
+                            <field name="po_number"
+                                   attrs="{'readonly': [('state', '=', 'validate')],'required': [('entry_type', '=', 'purchase')], 'invisible': [('entry_type', 'in', (False,'outward','non_purchase'))]}"/>
+                            <!--                            <field name="inbound_number"-->
+                            <!--                                   attrs="{'readonly': [('state', '=', 'validate')], 'required': [('entry_type', '=', 'logistic_inbound')], 'invisible': [('entry_type', 'in', (False,'purchase','other_purchase','logistic_outbound'))]}"-->
+                            <!--                                   options="{'no_open': True}"/>-->
+                            <!--                            <field name="name1"-->
+                            <!--                                   attrs="{'readonly': [('state', '=', 'validate')], 'required': [('entry_type', '=', 'logistic_outbound')], 'invisible': [('entry_type', 'in', (False,'purchase','other_purchase','logistic_inbound'))]}"-->
+                            <!--                                   options="{'no_open': True}"/>-->
+
+                            <field name="in_date"
+                                   attrs="{'readonly': ['|', ('state','=','validate'), ('entry_type','=','outward')], 'invisible': [('entry_type', 'in', (False,None))]}"/>
+                            <field name="out_date"
+                                   attrs="{'readonly': [('state','=','validate')], 'invisible': [('entry_type', 'in', (False,None))]}"/>
+                            <!--                            <field name="from_h"-->
+                            <!--                                   attrs="{'readonly': [('state','=','validate')], 'invisible': [('entry_type', 'in', (False,'logistic_inbound','logistic_outbound',None))]}"/>-->
+                            <!--                            <field name="state_h"-->
+                            <!--                                   attrs="{'readonly': [('state','=','validate')], 'invisible': [('entry_type', 'in', (False,'logistic_inbound','logistic_outbound',None))]}"/>-->
+                            <!--                            <field name="seal_no"-->
+                            <!--                                   attrs="{'readonly': [('state','=','validate')], 'invisible': [('entry_type', 'in', (False,'logistic_inbound','logistic_outbound',None))]}"/>-->
+                        </group>
+                        <group>
+                            <field name="driver_name" attrs="{'readonly': [('state','=','validate')]}"/>
+                            <field name="driver_mob_no"
+                                   attrs="{'readonly': [('state','=','validate')], 'required': [('entry_type', 'in', 'outward')], 'invisible': [('entry_type', 'in', (False,None))]}"/>
+                            <field name="vehicle_number" attrs="{'readonly': [('state','=','validate')]}"/>
+                            <field name="remark"/>
+                            <!--                            <field name="odometer_ending"-->
+                            <!--                                   attrs="{'readonly': [('state','=','validate')], 'invisible': [('entry_type', 'in', (False,'purchase','other_purchase',None))]}"/>-->
+
+                            <field name="supplier_id" options="{'no_create':'true','no_create_edit':'true'}"
+                                   attrs="{'readonly': [('state','=','validate')], 'invisible': [('entry_type', 'in', (False,'non_purchase','outward',None))]}"/>
+                            <field name="reason_entry" options="{'no_create':'true','no_create_edit':'true'}"
+                                   attrs="{'readonly': [('state','=','validate')], 'invisible': [('entry_type', 'in', (False,'purchase',None))]}"/>
+                            <!--                            <field name="supervisior_id" options="{'no_create':'true','no_create_edit':'true'}"-->
+                            <!--                                   attrs="{'readonly': [('state','=','validate')], 'invisible': [('entry_type', 'in', (False,'logistic_inbound','logistic_outbound',None))]}"/>-->
+                            <!--                            <field name="entry_date" options="{'no_create':'true','no_create_edit':'true'}"-->
+                            <!--                                   attrs="{'readonly': [('state','=','validate')], 'invisible': [('entry_type', 'in', (False,'logistic_inbound','logistic_outbound',None))]}"/>-->
+                            <!--                            <field name="arrival_gap" widget="float_time"-->
+                            <!--                                   attrs="{'readonly': [('state','=','validate')], 'invisible': [('entry_type', 'in', (False,'logistic_inbound','logistic_outbound',None))]}"/>-->
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Products" name="products"
+                              attrs="{'invisible': [('entry_type', 'in', (False,'non_purchase','outward'))]}">
+                            <field name="product_lines" attrs="{'readonly': [('state', 'in', ('validate'))]}">
+                                <tree string="Products Lines" editable="bottom">
+                                    <field name="product_barcode"/>
+                                    <field name="product_id"/>
+                                    <field name="uom_id" optional="show"/>
+                                    <field name="quantity"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record id="action_gate_entry_view" model="ir.actions.act_window">
+        <field name="name">Gate Entry</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">gate.entry</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+    <menuitem id="menu_gate_entry_view" action="action_gate_entry_view" name="Gate Entry"
+              web_icon="bz_gate_entry,static/description/gate.png" groups="bz_gate_entry.gate_keeper_group"/>
+
+    <!--   Adding smart button for gate entry   -->
+
+    <!--    <record id="stock_pickng_quality_check" model="ir.ui.view">-->
+    <!--        <field name="name">stock.pickng.quality.check</field>-->
+    <!--        <field name="model">stock.picking</field>-->
+    <!--        <field name="inherit_id" ref="stock.view_picking_form"/>-->
+    <!--        <field name="arch" type="xml">-->
+    <!--            <xpath expr="//div[@name='button_box']" position="inside">-->
+    <!--                <button name="get_gate_entry" type="object" class="oe_stat_button" icon="fa-truck">-->
+    <!--                    <field string="Gate Entry" name="gate_entry_count" widget="statinfo"/>-->
+    <!--                </button>-->
+    <!--            </xpath>-->
+    <!--            <field name="partner_id" position="after">-->
+    <!--                <field name="from_h"/>-->
+    <!--                <field name="state_h" options="{'no_create':'true','no_create_edit':'true'}"/>-->
+    <!--                <field name="seal_no"/>-->
+    <!--            </field>-->
+
+    <!--            <field name="location_dest_id" position="after">-->
+    <!--                <field name="gate_pass" invisible="1"/>-->
+    <!--                <field name="count_transportaion" invisible="1"/>-->
+    <!--            </field>-->
+    <!--            <xpath expr="//tree/field[@name='product_uom_qty']" position="before">-->
+    <!--                <field name="abw_gm" attrs="{'column_invisible': [('parent.picking_type_code', '!=', 'incoming')] }"-->
+    <!--                       force_save="1"/>-->
+    <!--                <field name="count" attrs="{'column_invisible': [('parent.picking_type_code', '!=', 'incoming')] }"-->
+    <!--                       force_save="1"/>-->
+    <!--                <field name="grade" attrs="{'column_invisible': [('parent.picking_type_code', '!=', 'incoming')] }"-->
+    <!--                       force_save="1"/>-->
+    <!--            </xpath>-->
+    <!--            <xpath expr="//sheet/notebook/page[@name='extra']" position="after">-->
+    <!--                <page name="transportation_details" string="Transportaion Details">-->
+    <!--                    <field name="transportaion_details_ids" nolabel="1">-->
+    <!--                        <tree editable="bottom">-->
+    <!--                            <field name="vehicle_id"/>-->
+    <!--                            <field name="driver"/>-->
+    <!--                            <field name="driver_contact"/>-->
+    <!--                            <field name="packaging_type"/>-->
+    <!--                            <field name="quantity"/>-->
+    <!--                            <field name="uom_id" options="{'no_create':'true','no_create_edit':'true'}"/>-->
+    <!--                            <field name="product_quantity"-->
+    <!--                                   attrs="{'column_invisible': [('parent.count_transportaion', '!=', True)]}"/>-->
+    <!--                            <field name="product_uom_id"-->
+    <!--                                   attrs="{'column_invisible': [('parent.count_transportaion', '!=', True)]}"-->
+    <!--                                   options="{'no_create':'true','no_create_edit':'true'}"/>-->
+    <!--                        </tree>-->
+    <!--                    </field>-->
+    <!--                </page>-->
+    <!--                <page name="plant_count" string="Plant Count"-->
+    <!--                      attrs="{'invisible': [('picking_type_code', 'not in', ('incoming','internal'))] }">-->
+    <!--                    <field name="plant_count_ids" nolabel="1">-->
+    <!--                        <tree editable="bottom">-->
+    <!--                            <field name="crate" readonly="1"/>-->
+    <!--                            <field name="full_weight"/>-->
+    <!--                            <field name="full_uom_id" options="{'no_create':'true','no_create_edit':'true'}"/>-->
+    <!--                            <field name="empty_weight"/>-->
+    <!--                            <field name="empty_uom_id" options="{'no_create':'true','no_create_edit':'true'}"/>-->
+    <!--                            <field name="real_weight"/>-->
+    <!--                            <field name="real_uom_id" options="{'no_create':'true','no_create_edit':'true'}"/>-->
+    <!--                        </tree>-->
+    <!--                    </field>-->
+    <!--                    <group name="plant_count_group" col="6" class="mt-2 mt-md-0">-->
+    <!--                        <group class="oe_subtotal_footer oe_right" colspan="2" name="plant_count_total">-->
+    <!--                            <div class="oe_subtotal_footer_separator oe_inline o_td_label">-->
+    <!--                                <label for="plant_real_weight_total"/>-->
+    <!--                            </div>-->
+    <!--                            <field name="plant_real_weight_total" nolabel="1" class="oe_subtotal_footer_separator"/>-->
+    <!--                        </group>-->
+    <!--                        <div class="oe_clear"/>-->
+    <!--                    </group>-->
+    <!--                </page>-->
+    <!--            </xpath>-->
+    <!--        </field>-->
+    <!--    </record>-->
+    <record id="view_gate_entry_search" model="ir.ui.view">
+        <field name="name">gate.entry.search</field>
+        <field name="model">gate.entry</field>
+        <field name="arch" type="xml">
+            <search string="Gate Entry">
+                <field name="name"/>
+                <field name="date"/>
+                <field name="driver_name"/>
+                <field name="vehicle_number"/>
+                <field name="state"/>
+                <separator/>
+                <group expand="1" string="Group By">
+                    <filter string="name" name="name" context="{'group_by':'name'}"/>
+                    <filter string="Date" name="date" context="{'group_by':'date'}"/>
+                    <filter string="Driver Name" name="driver_name" context="{'group_by':'driver_name'}"/>
+                    <filter string="Status" name="state" context="{'group_by':'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+</odoo>

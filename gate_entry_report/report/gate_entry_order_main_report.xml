@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="gate_report_document_1">
+            <div class="footer" style="text-align: center !important;">
+                Page
+                <span class="page"/>
+                of
+                <span class="topage"/>
+                <br/>
+            </div>
+            <table style="width:100%">
+                <thead>
+
+
+                    <tr>
+                        <th align="left">
+<img t-if="o.company_id.logo" t-att-src="image_data_uri(o.company_id.logo)" class="float-left" alt="Logo" style="text-align:left;max-width:150px;max-height:160px;"/>
+<b style="margin-left:175px;text-align:left;font-size:28px;max-width:80px;max-height:50px;"> GATE ENTRY </b>
+</th>
+                    </tr>
+                </thead>
+            </table>
+        </template>
+
+
+        <template id="gate_report_document">
+            <t t-call="web.html_container">
+                <t t-call="gate_entry_report.gate_report_document_1"/>
+                <t t-set="o" t-value="o.with_context(lang=lang)"/>
+                <div class="page">
+                    <table style="width:100%;border:1px solid black;border-collapse: collapse;margin-top: 0px;">
+                        <tbody>
+                            <style>
+                                td {
+                                border: 1px solid black;
+                                border-collapse: collapse;
+                                }
+                                th, td {
+                                padding-top: 10px;
+                                padding-bottom: 10px;
+                            </style>
+
+                            <tr>
+
+                                <td style="text-align:center;font-size:18px;width:7%;">SR.NO</td>
+                                <td colspan="4" style="text-align:left; padding-left:5px">
+                                    <center>
+                                        <b>PARTICULARS</b>
+                                    </center>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align:center;font-size:18px;width:7%;">1</td>
+                                <td colspan="3" style="text-align:left;padding-left:5px">
+                                    USER GIVEN BY
+                                </td>
+                                <td colspan="4" style="text-align:left;padding-left:5px">
+                                    <span t-esc="o.employee_id.name"/>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td style="text-align:center;font-size:18px;width:7%;">2</td>
+                                <td colspan="3" style="text-align:left;padding-left:5px">
+                                    DATE
+                                </td>
+                                <td colspan="4" style="text-align:left; padding-left:5px">
+                                    <span t-esc="o.date"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align:center;font-size:18px;width:7%;">3</td>
+                                <td colspan="3" style="text-align:left;padding-left:5px">
+                                    ENTRY TYPE
+                                </td>
+                                <td colspan="4" style="text-align:left; padding-left:5px">
+                                    <span t-esc="o.entry_type"/>
+                                </td>
+                            </tr>
+                            <t t-if="o.entry_type == 'non_purchase'">
+                                <tr>
+                                    <td style="text-align:center;font-size:18px;width:7%;">4</td>
+                                    <td colspan="3" style="text-align:left;padding-left:5px">
+                                        REASON FOR ENTRY
+                                    </td>
+                                    <td colspan="4" style="text-align:left; padding-left:5px">
+                                        <span t-esc="o.reason_entry"/>
+                                    </td>
+                                </tr>
+                            </t>
+                            <t t-if="o.entry_type == 'purchase'">
+                                <tr>
+                                    <td style="text-align:center;font-size:18px;width:7%;">4</td>
+                                    <td colspan="3" style="text-align:left;padding-left:5px">
+                                        PURCHASE NUMBER
+                                    </td>
+                                    <td colspan="4" style="text-align:left; padding-left:5px">
+                                        <span t-esc="o.po_number.name"/>
+                                    </td>
+                                </tr>
+                            </t>
+                            <tr>
+                                <td style="text-align:center;font-size:18px;width:7%;">5</td>
+                                <td colspan="3" style="text-align:left;padding-left:5px">
+                                    VEHICLE NUMBER
+                                </td>
+                                <td colspan="4" style="text-align:left; padding-left:5px">
+                                    <span t-esc="o.vehicle_number"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align:center;font-size:18px;width:7%;">6</td>
+                                <td colspan="3" style="text-align:left;padding-left:5px">
+                                    DRIVER DETAILS
+                                </td>
+                                <td colspan="4" style="text-align:left; padding-left:5px">
+                                    <span t-esc="o.driver_mob_no"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align:center;font-size:18px;width:7%;">7</td>
+                                <td colspan="3" style="text-align:left;padding-left:5px">
+                                    REMARK
+                                </td>
+                                <td colspan="4" style="text-align:left; padding-left:5px">
+                                    <span t-esc="o.remark"/>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td style="text-align:center;font-size:18px;width:7%;">8</td>
+                                <td colspan="3" style="text-align:left;padding-left:5px">
+                                    IN TIME AND DATE
+                                </td>
+                                <td colspan="4" style="text-align:left; padding-left:5px">
+                                    <span t-esc="o.in_date"/>
+                                </td>
+                            </tr>
+
+
+                            <tr>
+                                <td style="text-align:center;font-size:18px;width:7%;">9</td>
+                                <td colspan="3" style="text-align:left;padding-left:5px">
+                                    OUT TIME AND DATE
+                                </td>
+                                <td colspan="4" style="text-align:left; padding-left:5px">
+                                    <span t-esc="o.out_date"/>
+                                </td>
+                            </tr>
+
+                            <!--						<tr>-->
+                            <!--							<td style="text-align:center;font-size:18px;width:7%;">11</td>-->
+                            <!--							<td colspan="3" style="text-align:left;padding-left:5px">-->
+                            <!--								 ODOMETER READINGS-->
+                            <!--							</td>-->
+                            <!--							<td colspan="4" style="text-align:left; padding-left:5px">-->
+                            <!--								<b>ENDING : </b><t t-esc="o.odometer_ending"/> KM-->
+                            <!--							</td>-->
+                            <!--						</tr>-->
+                            <!--						<tr>-->
+                            <!--							<td style="text-align:center;font-size:18px;width:7%;">12</td>-->
+                            <!--							<td colspan="3" style="text-align:left;padding-left:5px">-->
+                            <!--								 RUN (IN KM)-->
+                            <!--							</td>-->
+                            <!--							<td colspan="4" style="text-align:left; padding-left:5px">-->
+                            <!--                                   <t t-esc="o.running_count"/>-->
+                            <!--							</td>-->
+                            <!--						</tr>-->
+                            <!--<tr>
+                                <td style="text-align:center;font-size:18px;width:7%;">13</td>
+                                <td colspan="3" style="text-align:left;padding-left:5px">
+                                     VEHICLE STATUS
+                                </td>
+                                <td colspan="4" style="text-align:left; padding-left:5px">
+                                    a) Well Maintained ,b)Maintenance is due on:___________
+                                </td>
+                            </tr>-->
+                            <!--						<tr>-->
+                            <!--							<td style="text-align:center;font-size:18px;width:7%;">13</td>-->
+                            <!--							<td colspan="3" style="text-align:left;padding-left:5px">-->
+                            <!--								 SEAL CONDITION-->
+                            <!--							</td>-->
+                            <!--						</tr>-->
+
+                            <tr>
+                                <td style="font-size:18px;padding-left:10px" colspan="7">
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+                                    <br/>
+
+                                    <b style="font-size:18px;padding-left:300px;text-align:right;" colspan="3">LOGISTIC
+                                        OFFICER SIGNATURE
+                                    </b>
+                                    <!--                                    <b style="font-size:18px;padding-left:300px;text-align:right;" colspan="4">SECURITY-->
+                                    <!--                                        STAMP WITH SIGN-->
+                                    <!--                                    </b>-->
+
+                                    <br/>
+                                    <br/>
+
+                                    <p style="font-size:17px;font-color:red:padding:20px;text-align:center;">Note : This
+                                        Gate Pass shall be maintained and kept in record by Security with actual out and
+                                        return time
+                                    </p>
+                                </td>
+
+                            </tr>
+                        </tbody>
+
+                    </table>
+
+
+                    <!--<table style="width:100%;border:1px solid black;border-collapse: collapse;margin-top: 10px;">
+                        <tr>
+                            <th style="width:10px;border-right: 1px solid black;">S. No</th>
+                            <th style="width:10px;border-right: 1px solid black;">Materials Code</th>
+                            <th style="width:10px;border-right: 1px solid black;" colspan="2">Materials Description</th>
+                            <th style="width:10px;border-right: 1px solid black;" colspan="1">UOM</th>
+                            <th style="width:10px;border-right: 1px solid black;" colspan="1">Qty</th>
+                            <th style="width:10px;border-right: 1px solid black;">LPP</th>
+                            <th style="width:10px;border-right: 1px solid black;" colspan="1">Inhand Stock</th>
+                        </tr>
+                        <tr>
+                        </tr>
+                        <t t-set="i" t-value="1" colspan="3"/>
+                        <t t-foreach="o.prod_ids" t-as="l">
+                            <tr>
+                                <td style="border-top: 1px solid black;text-align:center">
+                                    <span t-esc="i"/>
+                                    <t t-set="i" t-value="i+1"/>
+                                </td>
+                                <td style="border-top: 1px solid black;text-align:center">
+                                    <t t-esc="l.product_id.default_code"/>
+                                </td>
+                                <td style="border-top: 1px solid black;text-align:center" colspan="2">
+                                    <t t-esc="l.product_id.name"/>
+                                </td>
+                                <td style="border-top: 1px solid black;text-align:center">
+                                    <t t-esc="l.product_uom.name"/>
+                                </td>
+                                <td style="border-top: 1px solid black;text-align:center">
+                                    <t t-esc="l.product_qty"/>
+                                </td>
+                                <td style="border-top: 1px solid black;text-align:center">
+                                    <t t-esc="l.lpp"/>
+                                </td>
+                                <td style="border-top: 1px solid black;text-align:center">
+                                    <t t-esc="l.available_qty"/>
+                                </td>
+                            </tr>
+                            <tr>
+                            </tr>
+                        </t>
+                        <tr>
+                            <td style="font-size:18px;padding-left:10px" colspan="8">
+                                <b><t t-esc="o.pr_center"/> :</b>
+                                <t t-esc="o.reason"/>
+                            </td>
+                        </tr>
+                    </table>-->
+                    <br/>
+                    <br/>
+
+                    <!--<b style="font-size:18px;">Status: </b>
+                    <t t-if="o.state != 'md_validated'">
+                        <b>Under Approval</b>
+                    </t>
+                    <t t-if="o.state == 'md_validated'">
+                        <b>Approved</b>-->
+                    <!--</t><br/><br/><br/><br/><br/><br/><br/><br/>-->
+
+
+                    <!--<<table style="width:100%;border:none;text-align:center;border-collapse: collapse">
+                        <tr colspan="6">
+                            <td style="font-size:18px;padding-left:10px;border:0px">
+                                <t t-esc="o.employee_id.name"/>
+                            </td>
+                            <td style="font-size:18px;padding-left:10px;border:0px">
+                                <t t-esc="o.requestion_validater_id.name"/>
+                            </td>
+                            <td style="font-size:18px;padding-left:10px;border:0px">
+                                <t t-esc="o.store_manager_id.name"/>
+                            </td>
+                            <td style="font-size:18px;padding-left:10px;border:0px">
+                                <t t-esc="o.account_user_id.name"/>
+                            </td>
+                            <td style="font-size:18px;padding-left:10px;border:0px">
+                                <t t-esc="o.requestion_md_id.name"/>
+                            </td>
+                        </tr>
+                    </table>-->
+                </div>
+            </t>
+        </template>
+
+        <template id="gate_report">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="gate_entry_report.gate_report_document"/>
+                </t>
+            </t>
+        </template>
+
+    </data>
+</odoo>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="material_issue_reject_remark_view_id" model="ir.ui.view">
+            <field name="name">material.issue.reject.remarkform</field>
+            <field name="model">material.issue.reject.remark</field>
+            <field name="arch" type="xml">
+                <form >
+                    <field name= "name" required="1"/>
+                    <footer>
+                        <button name="action_reject_remark" string="Submit" type="object" class="oe_button oe_form_button_save oe_highlight" />
+                        or
+                        <button special="cancel" class="oe_link" string="Cancel" />
+                   </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_material_issue_reject_remark_wizard" model="ir.actions.act_window">
+            <field name="name">Reject Remarks</field>
+            <field name="res_model">material.issue.reject.remark</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+    </data>
+</odoo>

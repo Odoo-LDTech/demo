@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+    <template id="external_layout_bold">
+
+        <t t-if="not o" t-set="o" t-value="doc"/>
+
+        <t t-if="not company">
+            <!-- Multicompany -->
+            <t t-if="company_id">
+                <t t-set="company" t-value="company_id"/>
+            </t>
+            <t t-elif="o and 'company_id' in o and o.company_id.sudo()">
+                <t t-set="company" t-value="o.company_id.sudo()"/>
+            </t>
+            <t t-else="else">
+                <t t-set="company" t-value="res_company"/>
+            </t>
+        </t>
+
+        <div t-attf-class="header o_company_#{company.id}_layout" t-att-style="report_header_style">
+            <div class="o_clean_header">
+            <div class="row">
+                <div class="col-6">
+                    <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" alt="Logo"/>
+                </div>
+                <div class="col-5 offset-1" name="company_address">
+                    <span t-if="company.so_company_details" t-field="company.so_company_details"></span>
+                </div>
+            </div>
+            </div>
+        </div>
+
+        <div t-attf-class="article o_report_layout_bold o_company_#{company.id}_layout {{  'o_report_layout_background' if company.layout_background in ['Geometric', 'Custom']  else  '' }}" t-attf-style="background-image: url({{ 'data:image/png;base64,%s' % company.layout_background_image.decode('utf-8') if company.layout_background_image and company.layout_background == 'Custom' else ('/base/static/img/bg_background_template.jpg' if company.layout_background == 'Geometric' else '') }});" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id" t-att-data-oe-lang="o and o.env.context.get('lang')">
+            <t t-call="web.address_layout"/>
+            <t t-out="0"/>
+        </div>
+
+        <div t-attf-class="footer o_clean_footer o_company_#{company.id}_layout">
+            <div class="row mt32" style="margin-top:32px !important">
+                <div class="col-12 text-center">
+                    <span style="font-size:15px"><t t-esc="company.so_footer_line1"/></span><br/>
+                    <span style="font-size:15px"><t t-esc="company.so_footer_line2"/></span>
+                </div>
+<!--                <div class="col-4">-->
+<!--                    <span t-if="company.company_details" t-field="company.company_details"/>-->
+<!--                </div>-->
+<!--                <div class="col-3">-->
+<!--                    <div class="mt0 mb0 h5" t-field="company.report_header"/>-->
+<!--                </div>-->
+<!--                <div class="col-1">-->
+<!--                    <ul t-if="report_type == 'pdf'" class="list-inline pagenumber float-end text-center">-->
+<!--                        <li class="list-inline-item"><strong><span class="page"/></strong></li>-->
+<!--                    </ul>-->
+<!--                </div>-->
+            </div>
+        </div>
+    </template>
+
+    <template id="report_saleorder_custom">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="sale_order_report.external_layout_bold">
+                    <div class="page" style="border:1px solid black;height:879px;">
+                        <style>th, td ,tr {
+                                border-collapse: collapse;
+                            }
+                            th , td {
+                                padding: 5px !important;
+                                margin: 0px !important;
+                            }
+                            table,tr,th,td{
+                                border:none;
+                            }</style>
+                        <div class="main">
+                            <div class="row">
+                                <div class="col-4" />
+                                <div class="col-4" style="text-align:center;text-decoration: underline;">
+                                    <h4>SALE ORDER</h4>
+                                </div>
+                                <div class="col-4" />
+                            </div>
+                            <br />
+                            <div class="row">
+                                <div class="col-4">
+                                    <table style="font-size:12px;width:100%;text-align: left;border:1px solid white;">
+                                        <tr>
+                                            <th style="width:40%;">Ref No.</th>
+                                            <td style="width:60%;">
+                                                <t t-esc="doc.name" />
+                                                <t t-if="doc.date_order">
+                                                    <t t-if="doc.date_order" t-esc="doc.date_order.strftime('%d.%m.%Y')" />
+                                                </t>
+                                            </td>
+                                        </tr>
+<!--                                        <tr>-->
+<!--                                            <th />-->
+<!--                                            <td>-->
+<!--                                                Dtd :- -->
+<!--                                                <t t-if="doc.date_ref">-->
+<!--                                                    <t t-esc="doc.date_ref.strftime('%d.%m.%Y')" />-->
+<!--                                                </t>-->
+<!--                                            </td>-->
+<!--                                        </tr>-->
+                                        <tr>
+                                            <th>To.</th>
+                                            <td>
+                                                <t t-if="doc.partner_id" t-esc="doc.partner_id.name" />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th />
+                                            <td>
+                                                <t t-if="doc.partner_id" t-esc="doc.partner_id.street" />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th />
+                                            <td>
+                                                <t t-if="doc.partner_id">
+                                                    <t t-esc="doc.partner_id.city" />
+                                                    <t t-if="doc.partner_id.state_id" t-esc="doc.partner_id.state_id.code" />
+                                                    <t t-esc="doc.partner_id.zip" />
+                                                </t>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th style="width:40%;" />
+                                            <td style="width:60%;">
+                                                <t t-if="doc.partner_id and doc.partner_id.country_id" t-esc="doc.partner_id.country_id.name" />
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="col-4" style="text-align:center;text-decoration: underline;" />
+                                <div class="col-4">
+                                    <table style="font-size:14px;width:100%;text-align: left;border:1px solid white;">
+                                        <tr>
+                                            <th style="width:40%;" />
+                                            <th style="width:20%;">Date:-</th>
+                                            <td style="width:40%;">
+                                                <t t-if="doc.date_order">
+                                                    <t t-if="doc.date_order" t-esc="doc.date_order.strftime('%d.%m.%Y')" />
+                                                </t>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="row" style="padding: 3px;font-size:12px;">
+                                <div class="col-5">
+                                    <span>
+                                        <b>
+                                            Ref :
+                                            <t t-esc="doc.client_order_ref" />
+                                        </b>
+                                    </span>
+                                </div>
+                                <div class="col-2" style="text-align:center;">
+                                    <span>
+                                        Dtd.
+                                        <t t-if="doc.date_ref">
+                                            <t t-esc="doc.date_ref.strftime('%d.%m.%Y')" />
+                                        </t>
+                                    </span>
+                                </div>
+                                <div class="col-5" />
+                            </div>
+                            <div class="row" style="padding: 3px;font-size:12px;">
+                                <div class="col-12">
+                                    <span>We do hereby contem our Sale Order as mentioned here under</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="main">
+                            <table class="table table-borderless" style="width:100%;font-size: 12px;">
+                                <thead style="border-top: 1px solid black;border-bottom: 1px solid black;">
+                                    <th style="width:50%;">Description</th>
+                                    <th style="width:15%;">Qty(MT)</th>
+                                    <th style="width:15%;">Basic Rate(PMT)</th>
+                                    <th style="width:20%;">Amount(Rs)</th>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="doc.order_line" t-as="line">
+                                        <tr>
+                                            <td style="text-align:left;">
+                                                <t t-esc="line.name" />
+                                            </td>
+                                            <td style="text-align: center;">
+                                                <t t-esc="line.product_uom_qty" />
+                                            </td>
+                                            <td style="text-align: right;">
+                                                <t t-esc="line.price_unit" />
+                                            </td>
+                                            <td style="text-align: right;">
+                                                <t t-esc="line.price_subtotal" />
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                            <div class="clearfix" name="so_total_summary" style="font-size:13px;">
+                                <div id="total" class="row" name="total">
+                                    <div class="col-6" style="padding:5px;">
+                                        <span>(<t t-esc="amount_num2word(doc.amount_total)"/>)</span>
+                                    </div>
+                                    <div class="col-6">
+                                        <table class="table table-sm table-borderless">
+                                            <!-- Tax totals -->
+                                            <t t-set="tax_totals" t-value="doc.tax_totals" />
+                                            <t t-call="account.document_tax_totals" />
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="main">
+                            <div class="row" style="padding:3px;font-size:12px;">
+                                <div class="col-12">
+                                    <span style="font-size:15px;">Terms &amp; Conditions :</span>
+                                    <br />
+                                    <t t-out="doc.note" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="main">
+                            <table style="width:100.2%;border-top:1px solid black;font-size: 12px;border-bottom:1px solid black;">
+                                <tr>
+                                    <th style="width:33.33%;text-align:center;font-size: 15px;padding:5px;border-bottom:1px dotted black;">Name Of Seller</th>
+                                    <th style="width:33.33%;text-align:center;font-size: 15px;padding:5px;border-bottom:1px dotted black;border-left:1px dotted black;border-right:1px dotted black">Name Of Buyer</th>
+                                    <th style="text-align:center;font-size: 15px;padding:5px;border-bottom:1px dotted black;">Name Of Consigee</th>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:left;">
+                                        <t t-esc="doc.company_id.name" />
+                                    </td>
+                                    <td style="text-align:left;border-left:1px dotted black;border-right:1px dotted black;">
+                                        <t t-esc="doc.partner_id.name" />
+                                    </td>
+                                    <td style="text-align:left;">
+                                        <t t-esc="doc.partner_id.name" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:left;">
+                                        Vill &amp; Po :
+                                        <t t-esc="doc.company_id.street" />
+                                        Tehsil :
+                                        <t t-esc="doc.company_id.street2" />
+                                    </td>
+                                    <td style="text-align:left;border-left:1px dotted black;border-right:1px dotted black;">
+                                        <t t-if="doc.partner_id" t-esc="doc.partner_id.street" />
+                                    </td>
+                                    <td style="text-align:left;">
+                                        <t t-if="doc.partner_id" t-esc="doc.partner_id.street" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:left;">
+                                        Tehsil :
+                                        <t t-esc="doc.company_id.street2" />
+                                    </td>
+                                    <td style="text-align:left;border-left:1px dotted black;border-right:1px dotted black;">
+                                        <t t-if="doc.partner_id" t-esc="doc.partner_id.street2" />
+                                    </td>
+                                    <td style="text-align:left;">
+                                        <t t-if="doc.partner_id" t-esc="doc.partner_id.street2" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:left;">
+                                        Dist :
+                                        <t t-esc="doc.company_id.city" />
+                                        ,
+                                        <t t-if="doc.company_id.state_id" t-esc="doc.company_id.state_id.name" />
+                                        <t t-esc="doc.company_id.zip" />
+                                    </td>
+                                    <td style="text-align:left;border-left:1px dotted black;border-right:1px dotted black;">
+                                        <t t-if="doc.partner_id" t-esc="doc.partner_id.city" />
+                                    </td>
+                                    <td style="text-align:left;">
+                                        <t t-if="doc.partner_id" t-esc="doc.partner_id.city" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="text-align:left;">
+                                        GSTIN:-
+                                        <t t-esc="doc.company_id.vat" />
+                                    </td>
+                                    <td style="text-align:left;border-left:1px dotted black;border-right:1px dotted black;">
+                                        GSTIN:-
+                                        <t t-esc="doc.partner_id.vat" />
+                                    </td>
+                                    <td style="text-align:left;">
+                                        GSTIN:-
+                                        <t t-esc="doc.partner_id.vat" />
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="main">
+                            <div class="row" style="padding:5px;font-size:12px;">
+                                <div class="col-4">
+                                    <span>
+                                        Name of the Broker :
+                                        <t t-esc="doc.broker_id.name" />
+                                    </span>
+                                    <br />
+                                    <span>For. Vikarm Private  Limited</span>
+                                    <br />
+                                    <br />
+                                    <br />
+                                    <span>Authorised Signatory</span>
+                                </div>
+                                <div class="col-8" />
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

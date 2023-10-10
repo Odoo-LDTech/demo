@@ -1,0 +1,7 @@
+<odoo>
+	<data>
+	    <record id="gate_keeper_group" model="res.groups">
+	        <field name="name">Gate keeper</field>
+	    </record>
+	</data>
+</odoo>

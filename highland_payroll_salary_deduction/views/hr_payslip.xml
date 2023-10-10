@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="hr_payslip_inherit_form_view_custom" model="ir.ui.view">
+            <field name="name">hr_payslip.inherit.form.custom</field>
+            <field name="model">hr.payslip</field>
+            <field name="inherit_id" ref="hr_payroll_community.view_hr_payslip_form"/>
+            <field name="arch" type="xml">
+
+                <xpath expr="//form/sheet/notebook/page[2]/field[@name='line_ids']/tree/field[@name='amount']"
+                       position="after">
+                    <field name="payable_days"/>
+                </xpath>
+                <xpath expr="//form/sheet/notebook/page[2]/field[@name='line_ids']/form/group/field[@name='amount']"
+                       position="after">
+                    <field name="payable_days"/>
+                </xpath>
+                <xpath expr="//form/sheet/notebook/page[2]/field[@name='line_ids']/tree/field[@name='total']"
+                       position="attributes">
+                    <attribute name="string">Earning</attribute>
+                </xpath>
+                <xpath expr="//form/sheet/notebook/page[2]/field[@name='line_ids']/form/group/field[@name='total']"
+                       position="attributes">
+                    <attribute name="string">Earning</attribute>
+                </xpath>
+
+            </field>
+        </record>
+
+    </data>
+</odoo>
+
